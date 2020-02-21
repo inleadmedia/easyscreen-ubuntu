@@ -1,4 +1,5 @@
 #!/bin/bash
+auth_token="$1";
 
 ### OOBP
 
@@ -17,10 +18,11 @@ echo 'AutomaticLogin=kiosk' >> /etc/gdm3/custom.conf
 
 # Install FF linux app
 sudo wget --output-document=/home/kiosk/install-app.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/install-app.sh
-sudo exec bash -c "bash /home/kiosk/install-app.sh c84c0799e0d67cb7feabc699b0b5812607e8935a /home/kiosk/es-linux-apps https://v3.lms.inlead.ws release"
+sudo bash -c "bash /home/kiosk/install-app.sh $1 /home/kiosk/es-linux-apps https://v3.lms.inlead.ws release"
 
 # Create autostart	
-sudo mkdir /home/kiosk/.config/autostart
+sudo mkdir -p /home/kiosk/.config
+sudo mkdir -p /home/kiosk/.config/autostart
 
 cat <<EOF | sudo tee /home/kiosk/.config/autostart/kiosk.desktop
 [Desktop Entry]

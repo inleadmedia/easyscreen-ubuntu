@@ -33,11 +33,11 @@ fnCheckConnection() {
 		sleep 3s
 
 		# Uncoment this line if you need Linux app to start
-#		sudo node /home/linux/es-linux-apps/index.js &
+#		sudo node /home/kiosk/es-linux-apps/index.js &
 		# Getting default welcome screen
 
-#		git clone -b release https://869173763bec469dd2f846e660801c1c4068ecb3@github.com/inleadmedia/es-license-service.git;
-#		cp -rf /home/linux/es-license-service/start_page/index.html /home/linux/index.html;
+#		git clone -b release https://c84c0799e0d67cb7feabc699b0b5812607e8935a@github.com/inleadmedia/es-license-service.git;
+#		cp -rf /home/kiosk/es-license-service/start_page/index.html /home/kiosk/index.html;
 #		sleep 1
 		# Get TW ID
 #		TWID="$(grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' .config/teamviewer/client.conf)";

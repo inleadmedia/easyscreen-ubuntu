@@ -3,20 +3,20 @@
 ### OEM
 
 # Install and upgrade software
-sudo apt-get update -y
-sudo apt-get upgrade -y
+sudo apt-get update -qq
+sudo apt-get upgrade -qq
 
 # Install tools and essentials
-sudo apt-get install unclutter --yes
-sudo apt-get install xdotool --yes
-sudo apt-get install openssh-server --yes
-sudo apt-get install libnotify4 --yes
-sudo apt-get install dconf-tools --yes
-sudo apt-get install xclip --yes
-sudo apt-get install build-essential --yes
-sudo apt-get install curl --yes
-sudo apt-get install build-essential --yes
-sudo apt-get install libssl-dev --yes
+sudo apt-get install unclutter -qq
+sudo apt-get install xdotool -qq
+sudo apt-get install openssh-server -qq
+sudo apt-get install libnotify4 -qq
+sudo apt-get install dconf-tools -qq
+sudo apt-get install xclip -qq
+sudo apt-get install build-essential -qq
+sudo apt-get install curl -qq
+sudo apt-get install build-essential -qq
+sudo apt-get install libssl-dev -qq
 
 # See Hidden Startup Applications
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
@@ -30,15 +30,15 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | 
 source ~/.bashrc
 
 # Delete Firefox
-sudo apt-get purge firefox -y
+sudo apt-get purge firefox -qq
 
 # Install Chrome
 sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo apt install ./google-chrome-stable_current_amd64.deb --yes
+sudo apt install ./google-chrome-stable_current_amd64.deb -qq
 
 # Install TeamViewer
 sudo wget https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
-sudo apt install ./teamviewer-host_amd64.deb --yes
+sudo apt install ./teamviewer-host_amd64.deb -qq
 
 # Patch gnome shell
 sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
@@ -267,8 +267,8 @@ sudo dconf update
 #sudo sh -c "echo \"CLUTTER_VBLANK=True\" >> /etc/environment"
 
 # Install and upgrade software
-sudo apt-get update -y
-sudo apt-get upgrade -y
+sudo apt-get update -qq
+sudo apt-get upgrade -qq
 
 # Adjust GRUB to start faster
 #sudoedit /etc/default/grub && sudo update-grub && systemctl reboot -i

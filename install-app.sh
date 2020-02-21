@@ -18,20 +18,20 @@ if [ "$auth_token" == "" ] || [ "$destination" == "" ] || [ "$lms_domain" == "" 
   exit 1;
 fi
 
-sudo apt-get update
+sudo apt-get update -qq
 
 # Check and install required utilites.
 
 command -v sed > /dev/null || {
-  sudo apt-get -y install sed;
+  sudo apt-get -qq install sed;
 }
 
 command -v java > /dev/null || {
-  sudo apt-get -y install default-jdk;
+  sudo apt-get -qq install default-jdk;
 }
 
 command -v javac > /dev/null || {
-  sudo apt-get -y install default-jre;
+  sudo apt-get -qq install default-jre;
 }
 
 command -v node > /dev/null || {
@@ -43,19 +43,19 @@ command -v node > /dev/null || {
 }
 
 command -v git > /dev/null || {
-  sudo apt-get -y install git;
+  sudo apt-get -qq install git;
 }
 
 command -v grep > /dev/null || {
-  sudo apt-get -y install grep;
+  sudo apt-get -qq install grep;
 }
 
 command -v evtest > /dev/null || {
-  sudo apt-get -y install evtest;
+  sudo apt-get -qq install evtest;
 }
 
 command -v xinput > /dev/null || {
-  sudo apt-get -y install xinput;
+  sudo apt-get -qq install xinput;
 }
 
 # Get teamviewer id.
