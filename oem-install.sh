@@ -249,7 +249,7 @@ sudo apt-get upgrade -y
 #  GRUB_SAVE_DEFAULT=false
 
 # All done
-echo "all done, rebooting"
+echo "All done."
 
 oem-config-prepare --quiet
-sudo systemctl reboot -i
+sudo poweroff
