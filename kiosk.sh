@@ -7,8 +7,8 @@
 unclutter &
 
 # If Chromium crashes (usually due to rebooting), clear the crash flag so we don't have the annoying warning bar
-sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/chromium/Default/Preferences
-sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/chromium/Default/Preferences
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/google-chrome/Default/Preferences
+sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/google-chrome/Default/Preferences
 
 # Check connection and run Chrome
 sleep 3s
@@ -33,7 +33,7 @@ fnCheckConnection() {
 		sleep 3s
 
 		# Uncoment this line if you need Linux app to start
-#		sudo node /home/linux/es-linux-app/index.js &
+#		sudo node /home/linux/es-linux-apps/index.js &
 		# Getting default welcome screen
 
 #		git clone -b release https://869173763bec469dd2f846e660801c1c4068ecb3@github.com/inleadmedia/es-license-service.git;
@@ -45,9 +45,9 @@ fnCheckConnection() {
 #		sed "$reg" index.html > start.html
 
 		# Run Chromium and open tabs
-		pkill -f -- "chromium-browser"
+		pkill -f -- "chrome"
 		sleep 2s
-		/usr/bin/chromium-browser --no-default-browser-check --password-store=basic --enable-native-gpu-memory-buffers --enable-features="CheckerImaging" --incognito --window-size=1920,1080 --kiosk --window-position=0,0 https://admin-vinbib.easyscreen.io/web/ &
+		/usr/bin/google-chrome --no-default-browser-check --password-store=basic --enable-native-gpu-memory-buffers --enable-features="CheckerImaging" --incognito --window-size=1920,1080 --kiosk --window-position=0,0 https://admin-esbbib.easyscreen.io/web/ &
 
 	fi
 }
