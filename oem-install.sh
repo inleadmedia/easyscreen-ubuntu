@@ -25,33 +25,16 @@ sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 sudo rm /etc/xdg/autostart/update-notifier
 sudo rm /etx/xdg/autostart/orca
 
-# Install nodejs stuff
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash;
-source ~/.bashrc
-
 # Delete Firefox
 sudo apt-get purge firefox -qq
 
 # Install Chrome
-sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt install ./google-chrome-stable_current_amd64.deb -qq
 
 # Install TeamViewer
-sudo wget https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
+sudo wget -q https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
 sudo apt install ./teamviewer-host_amd64.deb -qq
-
-# Patch gnome shell
-sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
-
-# Disable built in gestures
-sudo wget "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
-sudo gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.v2.shell-extension.zip
-sudo gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
-
-# Disable OSK
-sudo wget "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
-sudo gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
-sudo gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
 
 # Disable screen tearing 
 cat <<EOF | sudo tee /usr/share/X11/xorg.conf.d/20-intel.conf
@@ -75,7 +58,7 @@ EOF
 
 
 # Fetch custom background
-sudo wget https://storage.easyting.dk/ubuntu/inlead-ff-ubuntu-bg.png -P /usr/share/backgrounds/
+sudo wget -q https://storage.easyting.dk/ubuntu/inlead-ff-ubuntu-bg.png -P /usr/share/backgrounds/
 
 # Set GNOME settings
 cat <<EOF | sudo tee /etc/dconf/profile/user
@@ -269,15 +252,6 @@ sudo dconf update
 # Install and upgrade software
 sudo apt-get update -qq
 sudo apt-get upgrade -qq
-
-# Adjust GRUB to start faster
-#sudoedit /etc/default/grub && sudo update-grub && systemctl reboot -i
-#  GRUB_DEFAULT=Ubuntu
-#  GRUB_HIDDEN_TIMEOUT=0
-#  GRUB_HIDDEN_TIMEOUT_QUIET=true
-#  GRUB_TIMEOUT=0.1
-#  GRUB_DISABLE_OS_PROBER=true
-#  GRUB_SAVE_DEFAULT=false
 
 # All done
 echo "All done."

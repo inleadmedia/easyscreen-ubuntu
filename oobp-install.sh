@@ -3,6 +3,23 @@ auth_token="$1";
 
 ### OOBP
 
+# Patch gnome shell
+sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
+
+# Disable built in gestures
+sudo wget -q "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
+sudo gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.v2.shell-extension.zip
+sudo gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
+
+# Disable OSK
+sudo wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
+sudo gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
+sudo gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
+
+# Install nodejs stuff
+sudo curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash;
+source ~/.bashrc
+
 # Create user and define autologin
 sudo useradd -s /bin/bash -d /home/kiosk/ -m kiosk
 
@@ -17,7 +34,7 @@ echo 'AutomaticLoginEnable=True' >> /etc/gdm3/custom.conf
 echo 'AutomaticLogin=kiosk' >> /etc/gdm3/custom.conf
 
 # Install FF linux app
-sudo wget --output-document=/home/kiosk/install-app.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/install-app.sh
+sudo wget -q --output-document=/home/kiosk/install-app.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/install-app.sh
 sudo bash -c "bash /home/kiosk/install-app.sh $1 /home/kiosk/es-linux-apps https://v3.lms.inlead.ws release"
 
 # Create autostart	
@@ -33,7 +50,7 @@ Exec=/home/kiosk/kiosk.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
-sudo wget --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
+sudo wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
 sudo chmod +x /home/kiosk/kiosk.sh
 
 reboot
