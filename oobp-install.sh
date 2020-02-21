@@ -1,11 +1,15 @@
 #!/bin/bash
 auth_token="$1";
+destination="$2";
+lms_domain="$3";
+branch=$4;
+TMID="$5";
 
 ### OOBP
 
 # Get SSH keys
-sudo wget -q --output-document=/home/inlead/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
-sudo wget -q --output-document=/home/inlead/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
+#sudo wget -q --output-document=/home/inlead/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
+#sudo wget -q --output-document=/home/inlead/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
 
 # Patch gnome shell
 sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
@@ -20,10 +24,6 @@ sudo wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_But
 sudo gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
 sudo gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
 
-# Install nodejs stuff
-sudo curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash;
-source ~/.bashrc
-
 # Create user and define autologin
 sudo useradd -s /bin/bash -d /home/kiosk/ -m kiosk
 
@@ -36,10 +36,6 @@ sudo useradd -s /bin/bash -d /home/kiosk/ -m kiosk
 # Define autologin
 echo 'AutomaticLoginEnable=True' >> /etc/gdm3/custom.conf
 echo 'AutomaticLogin=kiosk' >> /etc/gdm3/custom.conf
-
-# Install FF linux app
-sudo wget -q --output-document=/home/kiosk/install-app.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/install-app.sh
-sudo bash -c "bash /home/kiosk/install-app.sh $1 /home/kiosk/es-linux-apps https://v3.lms.inlead.ws release"
 
 # Create autostart	
 sudo mkdir -p /home/kiosk/.config
@@ -57,5 +53,15 @@ EOF
 sudo wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
 sudo chmod +x /home/kiosk/kiosk.sh
 
-reboot
+# Install FF linux app
+git clone -b $branch "https://$token@github.com/inleadmedia/es-linux-apps.git" /home/kiosk/es-linux-apps
+sudo bash /home/kiosk/es-linux-apps/install-nvm.sh # Install nodejs stuff
+sudo bash -c "bash /home/kiosk/es-linux-apps/install-app.sh --auth-token=$token --destination=$destination --lms-domain=$lms_domain --app-branch=$branch --rfid-scanner=FEIG --printer=POS --tmid=$tmid --barcode-scanner"
+
+# Install nodejs deps.
+#npm install &&
+#sudo wget -q --output-document=/home/kiosk/install-app.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/install-app.sh
+#sudo bash -c "bash /home/kiosk/install-app.sh $1 /home/kiosk/es-linux-apps https://v3.lms.inlead.ws release"
+
+#reboot
 
