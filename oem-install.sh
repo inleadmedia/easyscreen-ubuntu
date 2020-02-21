@@ -40,11 +40,18 @@ sudo apt install ./google-chrome-stable_current_amd64.deb --yes
 sudo wget https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
 sudo apt install ./teamviewer-host_amd64.deb --yes
 
-# Disable built in gestures
+# Patch gnome shell
 sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
-wget "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
-gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.*.zip
-gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
+
+# Disable built in gestures
+sudo wget "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
+sudo gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.v2.shell-extension.zip
+sudo gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
+
+# Disable OSK
+sudo wget "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
+sudo gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
+sudo gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
 
 # Disable screen tearing 
 cat <<EOF | sudo tee /usr/share/X11/xorg.conf.d/20-intel.conf
