@@ -47,7 +47,7 @@ fnCheckConnection() {
 		# Run Chromium and open tabs
 		pkill -f -- "chrome"
 		sleep 2s
-		/usr/bin/google-chrome --no-default-browser-check --password-store=basic --enable-native-gpu-memory-buffers --enable-features="CheckerImaging" --incognito --window-size=1920,1080 --kiosk --window-position=0,0 https://admin-esbbib.easyscreen.io/web/ &
+		/usr/bin/google-chrome --no-first-run --disable-translate --no-default-browser-check --password-store=basic --enable-native-gpu-memory-buffers --enable-features="CheckerImaging" --incognito --window-size=1920,1080 --kiosk --window-position=0,0 https://admin-esbbib.easyscreen.io/web/ &
 
 	fi
 }

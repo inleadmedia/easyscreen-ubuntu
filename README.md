@@ -7,7 +7,12 @@
 
 ## OEM Installation of the Operating System
 
-Boot from Ubuntu Desktop 18.04.4 LTS as OEM installation on machine and start the installation. Go through the installation process.
+Boot from Ubuntu Desktop 18.04.4 LTS as OEM installation on machine and start the installation. Go through the installation process setting the following details.
+- Keyboard layout: Danish
+- Minimal installation
+- Install third party software: yes
+- Timezone: Copenhagen
+- Erase disk and install Ubuntu
 
 Do the installation in "next-next-next" style until the installation is ready and the system wants to reboot. When the machine computer has rebooted, run the following command. 
 ```

@@ -8,9 +8,10 @@ TMID="$5";
 ### OOBP
 
 # Get SSH keys
-sudo wget -q --output-document=~/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
-sudo wget -q --output-document=~/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
-sudo chmod 0600 ~/.ssh/id_rsa
+sudo mkdir -p /root/.ssh
+sudo wget -q --output-document=/root/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
+sudo wget -q --output-document=/root/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
+sudo chmod 0600 /root/.ssh/id_rsa
 
 # Patch gnome shell
 sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
@@ -25,12 +26,57 @@ sudo wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_But
 sudo gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
 sudo gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
 
-# Create user and define autologin
-sudo useradd -s /bin/bash -d /home/kiosk/ -m kiosk
+# Create user
+sudo su -c "groupadd kiosk"
+sudo su -c "useradd kiosk -s /bin/bash -d /home/kiosk/ -m -g kiosk"
+
+# Add users to sudo
+sudo sh -c "echo \"kiosk ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+sudo sh -c "echo \"inlead ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
 
 # Define autologin
-echo 'AutomaticLoginEnable=True' >> /etc/gdm3/custom.conf
-echo 'AutomaticLogin=kiosk' >> /etc/gdm3/custom.conf
+
+cat <<EOF | sudo tee /etc/gdm3/custom.conf 
+# GDM configuration storage
+#
+# See /usr/share/gdm/gdm.schemas for a list of available options.
+
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=kiosk
+
+# Uncoment the line below to force the login screen to use Xorg
+#WaylandEnable=false
+
+# Enabling automatic login
+
+# Enabling timed login
+TimedLoginEnable = true
+TimedLogin = username
+TimedLoginDelay = 10
+
+[security]
+
+[xdmcp]
+
+[chooser]
+
+[debug]
+# Uncomment the line below to turn on debugging
+# More verbose logs
+# Additionally lets the X server dump core if it crashes
+#Enable=true
+EOF
+
+sudo bash -c 'cat > /usr/share/lightdm/lightdm.conf.d/99-kiosk.conf' << EOF
+[Seat:*]
+user-session=kiosk
+EOF
+
+sudo -u kiosk bash -c 'cat > ~kiosk/.dmrc' << EOF
+[Desktop]
+Session=kiosk
+EOF
 
 # Create autostart	
 sudo mkdir -p /home/kiosk/.config
@@ -49,7 +95,7 @@ sudo wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubuserconten
 sudo chmod +x /home/kiosk/kiosk.sh
 
 # Install FF linux app
-sudo git clone -b $branch "git@github.com/inleadmedia/es-linux-apps.git" /home/kiosk/es-linux-apps
+sudo git clone -q -b $branch "git@github.com:inleadmedia/es-linux-apps.git" /home/kiosk/es-linux-apps
 sudo bash /home/kiosk/es-linux-apps/installation/install-nvm.sh
 sudo bash -c "bash /home/kiosk/es-linux-apps/installation/install-app.sh --auth-token=$auth_token --destination=$destination --lms-domain=$lms_domain --app-branch=$branch --rfid-scanner=FEIG --printer=POS --tmid=$TMID --barcode-scanner=serialport"
 
