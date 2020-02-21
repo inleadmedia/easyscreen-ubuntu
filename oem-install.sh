@@ -18,6 +18,13 @@ sudo apt-get install curl --yes
 sudo apt-get install build-essential --yes
 sudo apt-get install libssl-dev --yes
 
+# See Hidden Startup Applications
+sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
+
+# Remove autostart items
+sudo rm /etc/xdg/autostart/update-notifier
+sudo rm /etx/xdg/autostart/orca
+
 # Install nodejs stuff
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash;
 source ~/.bashrc
@@ -40,7 +47,15 @@ gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.*.zip
 gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
 
 # Disable screen tearing 
-sudo wget --output-document=/usr/share/X11/xorg.conf.d/20-intel.conf http://storage.easyting.dk/ubuntu/20-intel.conf
+cat <<EOF | sudo tee /usr/share/X11/xorg.conf.d/20-intel.conf
+ection "Device"
+   Identifier "Intel Graphics"
+   Driver "intel"
+   Option "AccelMethod" "sna"
+   Option "TearFree" "true"
+   Option "DRI" "3"
+EndSection
+EOF
 
 # Disable Appport
 sudo systemctl disable apport
@@ -65,7 +80,7 @@ sudo mkdir -p /etc/dconf/db/local.d
 
 cat <<EOF | sudo tee  /etc/dconf/db/local.d/00_session
 [org/gnome/desktop/session]
-idle-delay='0'
+idle-delay=0
 EOF
 
 cat <<EOF | sudo tee  /etc/dconf/db/local.d/01_lockdown
@@ -132,6 +147,11 @@ cat <<EOF | sudo tee  /etc/dconf/db/local.d/11_software
 [org/gnome/software]
 download-updates=false
 allow-updates=false
+EOF
+
+cat <<EOF | sudo tee  /etc/dconf/db/local.d/12_keyboard
+[org/gnome/desktop/a11y/applications]
+screen-keyboard-enabled=false
 EOF
 
 # Lock settings
@@ -227,6 +247,10 @@ EOF
 
 cat <<EOF | sudo tee /etc/dconf/db/local.d/locks/20_allow-updates
 /org/gnome/software/allow-updates
+EOF
+
+cat <<EOF | sudo tee /etc/dconf/db/local.d/locks/21_keyboard
+/org/gnome/desktop/a11y/applications/screen-keyboard-enabled
 EOF
 
 sudo dconf update
