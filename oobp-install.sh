@@ -3,6 +3,10 @@ auth_token="$1";
 
 ### OOBP
 
+# Get SSH keys
+sudo wget -q --output-document=/home/inlead/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
+sudo wget -q --output-document=/home/inlead/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
+
 # Patch gnome shell
 sudo wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff | patch /usr/bin/gnome-shell-extension-tool
 

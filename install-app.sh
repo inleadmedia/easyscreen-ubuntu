@@ -2,7 +2,7 @@
 auth_token="$1";
 destination="$2";
 lms_domain="$3";
-brach=$4;
+branch=$4;
 TMID="$5";
 
 if [ "$auth_token" == "" ] || [ "$destination" == "" ] || [ "$lms_domain" == "" ]; then
@@ -66,12 +66,12 @@ if [ "$TMID" == "" ];  then
 fi
 
 
-if [ "$brach" == "" ];  then 
-  brach="develop"
+if [ "$branch" == "" ];  then 
+  branch="develop"
 fi
 
 # Clone main app and checkout into selected branch.
-git clone "https://$auth_token@github.com/inleadmedia/es-linux-apps.git" "$destination" && cd "$destination" && git checkout "$brach" && 
+git clone "https://$auth_token@github.com/inleadmedia/es-linux-apps.git" "$destination" && cd "$destination" && git checkout "$branch" && 
 
 # Install nodejs deps.
 npm install &&
