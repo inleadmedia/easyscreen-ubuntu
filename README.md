@@ -16,7 +16,7 @@ Boot from Ubuntu Desktop 18.04.4 LTS as OEM installation on machine and start th
 
 Do the installation in "next-next-next" style until the installation is ready and the system wants to reboot. When the machine computer has rebooted, run the following command. 
 ```
-sudo wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/oem-install.sh | bash
+wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/oem-install.sh | sudo bash
 ```
 
 Wait until the terminal ask for the password of the user and input it. The machine will shutdown and is ready for install.
@@ -29,14 +29,14 @@ Power on the machine and proceed with the installation. Go through the installat
 - Timezone: Copenhagen
 - Keyboard layout: Danish 
 - User information:
-  - Name: inlead-admin
+  - Name: inlead
   - Computer name: inlead-kiosk-XXX
-  - Username: inlead-admin
+  - Username: inlead
   - Password: [predefined value]
 
 Do the installation in "next-next-next" style until the installation is ready and the system wants to reboot. When the machine computer has rebooted, run the following command. 
 ```
-wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/oobp-install.sh | bash
+wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/oobp-install.sh | sudo bash
 ```
 
 Wait until the terminal says that it's safe to reboot. Now reboot and from that boot on, the computer should match the current description.
