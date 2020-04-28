@@ -1,4 +1,22 @@
 #!/bin/bash
+
+abort()
+{
+    echo >&2 '
+***************
+*** ABORTED ***
+***************
+'
+    echo "An error occurred. Exiting..." >&2
+    exit 1
+}
+
+trap 'abort' 0
+
+set -e
+
+TIMESTAMP=`date "+%Y-%m-%d %H:%M:%S"`
+
 auth_token="$1";
 destination="$2";
 lms_domain="$3";
@@ -7,28 +25,28 @@ TMID="$5";
 
 ### OOBP
 
-echo "# Create user"
+echo "$TIMESTAMP # Create user"
 sudo su -c "groupadd kiosk"
 sudo su -c "useradd kiosk -s /bin/bash -d /home/kiosk/ -m -g kiosk"
 
-echo "# Add users to sudo"
+echo "$TIMESTAMP # Add users to sudo"
 sudo sh -c "echo \"kiosk ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
 sudo sh -c "echo \"inlead ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
 
-echo "# Patch GNNOME shell extension"
+echo "$TIMESTAMP # Patch GNNOME shell extension"
 wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff |  sudo patch /usr/bin/gnome-shell-extension-tool
 
-echo "# Disable built in gestures"
+echo "$TIMESTAMP # Disable built in gestures"
 wget -q "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
 sudo -u kiosk gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.v2.shell-extension.zip
 sudo -u kiosk gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
 
-echo "# Disable OSK"
+echo "$TIMESTAMP # Disable OSK"
 wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
 sudo -u kiosk gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
 sudo -u kiosk gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
 
-echo "# Define autologin"
+echo "$TIMESTAMP # Define autologin"
 sudo tee /etc/gdm3/custom.conf >/dev/null <<'EOF'
 # GDM configuration storage
 
@@ -61,7 +79,7 @@ sudo -u kiosk tee ~kiosk/.dmrc >/dev/null <<'EOF'
 Session=kiosk
 EOF
 
-echo "# Create autostart"
+echo "$TIMESTAMP # Create autostart"
 sudo -u kiosk mkdir -p /home/kiosk/.config
 sudo -u kiosk mkdir -p /home/kiosk/.config/autostart
 
@@ -79,7 +97,7 @@ sudo chmod +x /home/kiosk/kiosk.sh
 
 # Install FF linux app
 
-echo "# Get SSH keys"
+echo "$TIMESTAMP # Get SSH keys"
 sudo -u kiosk mkdir -p /home/kiosk/.ssh
 sudo -u kiosk wget -q --output-document=/home/kiosk/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
 sudo -u kiosk wget -q --output-document=/home/kiosk/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
@@ -90,3 +108,12 @@ sudo -u kiosk bash /home/kiosk/es-linux-apps/installation/install-nvm.sh
 sudo -u kiosk bash -c "bash /home/kiosk/es-linux-apps/installation/install-app.sh --auth-token=$auth_token --destination=$destination --lms-domain=$lms_domain --app-branch=$branch --rfid-scanner=FEIG --printer=POS --tmid=$TMID --barcode-scanner=serialport"
 
 #reboot
+
+
+trap : 0
+
+echo >&2 '
+************
+*** DONE *** 
+************
+'
