@@ -15,14 +15,16 @@ trap 'abort' 0
 
 set -e
 
+TIMESTAMP=`date "+%Y-%m-%d %H:%M:%S"`
+
 
 ### OEM
 
-echo "# Install and upgrade software"
+echo "$TIMESTAMP # Install and upgrade software"
 sudo apt-get update -qq
 sudo apt-get upgrade -qq
 
-echo "# Install tools and essentials"
+echo "$TIMESTAMP # Install tools and essentials"
 sudo apt-get install unclutter -qq
 sudo apt-get install xdotool -qq
 sudo apt-get install openssh-server -qq
@@ -35,25 +37,25 @@ sudo apt-get install build-essential -qq
 sudo apt-get install libssl-dev -qq
 sudo apt-get install git -qq
 
-echo "# See Hidden Startup Applications"
+echo "$TIMESTAMP # See Hidden Startup Applications"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 
-echo "# Remove autostart items"
-sudo rm /etc/xdg/autostart/update-notifier
-sudo rm /etx/xdg/autostart/orca
+echo "$TIMESTAMP # Remove autostart items"
+sudo rm -f /etc/xdg/autostart/update-notifier 2> /dev/null
+sudo rm -f /etx/xdg/autostart/orca 2> /dev/null
 
-echo "# Delete Firefox"
+echo "$TIMESTAMP # Delete Firefox"
 sudo apt-get purge firefox -qq
 
-echo "# Install Chrome"
+echo "$TIMESTAMP # Install Chrome"
 sudo wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt install -y ./google-chrome-stable_current_amd64.deb -qq
 
-echo "# Install TeamViewer"
+echo "$TIMESTAMP # Install TeamViewer"
 sudo wget -q https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
 sudo apt install -y ./teamviewer-host_amd64.deb -qq
 
-echo "# Disable screen tearing"
+echo "$TIMESTAMP # Disable screen tearing"
 sudo tee -a /usr/share/X11/xorg.conf.d/20-intel.conf >/dev/null <<'EOF'
 Section "Device"
    Identifier "Intel Graphics"
@@ -64,7 +66,7 @@ Section "Device"
 EndSection
 EOF
 
-echo "# Disable Appport"
+echo "$TIMESTAMP # Disable Appport"
 sudo systemctl disable apport
 sudo tee -a /etc/default/apport >/dev/null <<'EOF'
 # set this to 0 to disable apport, or to 1 to enable it
@@ -73,10 +75,10 @@ sudo tee -a /etc/default/apport >/dev/null <<'EOF'
 enabled=0
 EOF
 
-echo "# Fetch custom background"
+echo "$TIMESTAMP # Fetch custom background"
 sudo wget -q https://storage.easyting.dk/ubuntu/inlead-ff-ubuntu-bg.png -P /usr/share/backgrounds/
 
-echo "# Set GNOME settings"
+echo "$TIMESTAMP # Set GNOME settings"
 sudo tee -a /etc/dconf/profile/user >/dev/null <<'EOF'
 user-db:user
 system-db:local
@@ -162,7 +164,7 @@ sudo tee /etc/dconf/db/local.d/12_keyboard >/dev/null <<'EOF'
 screen-keyboard-enabled=false
 EOF
 
-echo "# Lock dconf settings"
+echo "$TIMESTAMP # Lock dconf settings"
 sudo mkdir -p /etc/dconf/db/local.d/locks
 
 sudo tee /etc/dconf/db/local.d/locks/00_idle-delay >/dev/null <<'EOF'
@@ -275,7 +277,7 @@ sudo dconf update
 #sudo sh -c "echo \"CLUTTER_PAINT=disable-clipped-redraws:disable-culling\" >> /etc/environment"
 #sudo sh -c "echo \"CLUTTER_VBLANK=True\" >> /etc/environment"
 
-echo "# Install and upgrade software"
+echo "$TIMESTAMP # Install and upgrade software"
 sudo apt-get update -qq
 sudo apt-get upgrade -qq
 
