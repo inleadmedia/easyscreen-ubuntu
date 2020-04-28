@@ -1,5 +1,21 @@
 #!/bin/bash
 
+abort()
+{
+    echo >&2 '
+***************
+*** ABORTED ***
+***************
+'
+    echo "An error occurred. Exiting..." >&2
+    exit 1
+}
+
+trap 'abort' 0
+
+set -e
+
+
 ### OEM
 
 echo "# Install and upgrade software"
@@ -263,7 +279,13 @@ echo "# Install and upgrade software"
 sudo apt-get update -qq
 sudo apt-get upgrade -qq
 
-echo "============ All done."
-
 sudo oem-config-prepare --quiet
 #sudo poweroff
+
+trap : 0
+
+echo >&2 '
+************
+*** DONE *** 
+************
+'
