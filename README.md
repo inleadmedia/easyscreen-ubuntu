@@ -40,3 +40,22 @@ wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master
 ```
 
 Wait until the terminal says that it's safe to reboot. Now reboot and from that boot on, the computer should match the current description.
+
+## Prepration
+
+When the machine computer has rebooted, run the following command. 
+```
+wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh | sudo bash -s [AUTH_TOKEN] /home/kiosk/es-linux-app https://v3.lms.inlead.ws develop 123456789
+```
+
+Wait until the terminal says that it's safe to reboot. Now reboot and from that boot on, the computer is ready for production.
+
+
+## Configuration
+
+Temporarily, you will have to.
+* Edit `/home/kiosk/kiosk.sh#L50` with the proper URL to spawn in Chrome
+* Gather TeamViewer information
+  * Settings -> Security -> Personal password -> [Change passsword] -> XXX -> [Apply]
+  * Gather the "Your ID"
+
