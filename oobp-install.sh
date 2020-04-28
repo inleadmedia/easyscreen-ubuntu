@@ -36,15 +36,15 @@ sudo sh -c "echo \"inlead ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
 echo "$TIMESTAMP # Patch GNNOME shell extension"
 wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff |  sudo patch /usr/bin/gnome-shell-extension-tool
 
-echo "$TIMESTAMP # Disable built in gestures"
-wget -q "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
-sudo -u kiosk gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.v2.shell-extension.zip
-sudo -u kiosk gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
+#echo "$TIMESTAMP # Disable built in gestures"
+#wget -q "https://extensions.gnome.org/extension-data/disable-gestures%40mattbell.com.au.v2.shell-extension.zip"
+#sudo -u kiosk gnome-shell-extension-tool -i disable-gestures@mattbell.com.au.v2.shell-extension.zip
+#sudo -u kiosk gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
 
-echo "$TIMESTAMP # Disable OSK"
-wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
-sudo -u kiosk gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
-sudo -u kiosk gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
+#echo "$TIMESTAMP # Disable OSK"
+#wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
+#sudo -u kiosk gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
+#sudo -u kiosk gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
 
 echo "$TIMESTAMP # Define autologin"
 sudo tee /etc/gdm3/custom.conf >/dev/null <<'EOF'
