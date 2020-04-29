@@ -88,7 +88,7 @@ sudo mkdir -p /etc/dconf/db/local.d
 
 sudo tee /etc/dconf/db/local.d/00_session >/dev/null <<'EOF'
 [org/gnome/desktop/session]
-idle-delay=0
+idle-delay=uint32 0
 EOF
 
 sudo tee /etc/dconf/db/local.d/01_lockdown >/dev/null <<'EOF'
