@@ -83,6 +83,17 @@ EOF
 sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
 sudo chmod +x /home/kiosk/kiosk.sh
 
+
+echo "$TIMESTAMP # Network policy"
+sudo tee /etc/polkit-1/localauthority/50-local.d/10-network-manager.pkla >/dev/null <<'EOF'
+[Let user kiosk modify system settings for network]
+Identity=unix-user:kiosk
+Action=org.freedesktop.NetworkManager.settings.modify.system
+ResultAny=no
+ResultInactive=no
+ResultActive=yes
+EOF
+
 #reboot
 
 
