@@ -78,6 +78,13 @@ EOF
 echo "$TIMESTAMP # Fetch custom background"
 sudo wget -q https://storage.easyting.dk/ubuntu/inlead-ff-ubuntu-bg.png -P /usr/share/backgrounds/
 
+echo "$TIMESTAMP # Make GRUB quiet and fast"
+sudo tee -a /etc/default/grub >/dev/null <<'EOF'
+GRUB_HIDDEN_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+EOF
+sudo update-grub
+
 echo "$TIMESTAMP # Set GNOME settings"
 sudo tee -a /etc/dconf/profile/user >/dev/null <<'EOF'
 user-db:user
@@ -291,3 +298,5 @@ echo >&2 '
 *** DONE *** 
 ************
 '
+
+reboot

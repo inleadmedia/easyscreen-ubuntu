@@ -94,7 +94,7 @@ ResultInactive=no
 ResultActive=yes
 EOF
 
-#reboot
+reboot
 
 
 trap : 0

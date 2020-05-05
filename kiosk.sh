@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#xrandr --output HDMI-1 --auto --primary
+xrandr --output eDP1 --off
+
 # Run this script in display 0 - the monitor
 #export DISPLAY=:0
 
@@ -37,7 +40,7 @@ fnCheckConnection() {
 		sleep 3s
 
 		# Uncoment this line if you need Linux app to start
-#		sudo node /home/kiosk/es-linux-apps/index.js &
+		sudo node /home/kiosk/es-linux-app/./index.js &
 		# Getting default welcome screen
 
 #		git clone -b release https://c84c0799e0d67cb7feabc699b0b5812607e8935a@github.com/inleadmedia/es-license-service.git;
