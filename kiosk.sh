@@ -3,6 +3,10 @@
 # Run this script in display 0 - the monitor
 #export DISPLAY=:0
 
+# Disable gestures and OSK
+gnome-shell-extension-tool -e disable-gestures@mattbell.com.au
+gnome-shell-extension-tool -e On_Screen_Keyboard_Button@bradan.eu
+
 # Hide the mouse from the display
 unclutter &
 
