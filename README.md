@@ -41,7 +41,7 @@ Wait until the terminal says that it's safe to reboot. Now reboot and from that 
 
 When the machine computer has rebooted, run the following command: 
 ```
-wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh | sudo bash -s [AUTH_TOKEN] /home/kiosk/es-linux-app https://v3.lms.inlead.ws v1.2.0 123456789
+wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh | sudo bash -s [AUTH_TOKEN] /home/kiosk/es-linux-app https://v3.lms.inlead.ws [VERSION] 123456789
 ```
 
 Wait until the terminal says that it's safe to reboot. Now reboot and from that boot on, the computer is ready for production.
