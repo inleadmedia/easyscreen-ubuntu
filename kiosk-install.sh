@@ -33,6 +33,9 @@ echo "$TIMESTAMP # Disable OSK"
 wget -q "https://extensions.gnome.org/extension-data/On_Screen_Keyboard_Button%40bradan.eu.v4.shell-extension.zip"
 sudo -u kiosk gnome-shell-extension-tool -i On_Screen_Keyboard_Button@bradan.eu.v4.shell-extension.zip
 
+wget -q "https://extensions.gnome.org/extension-data/cariboublocker%40git.keringar.xyz.v1.shell-extension.zip"
+sudo -u kiosk gnome-shell-extension-tool -i cariboublocker@git.keringar.xyz.v1.shell-extension.zip
+
 echo "$TIMESTAMP # Fix SSH keys"
 sudo -u kiosk mkdir -p /home/kiosk/.ssh
 sudo -u kiosk wget -q --output-document=/home/kiosk/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
