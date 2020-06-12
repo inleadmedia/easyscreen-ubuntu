@@ -289,7 +289,6 @@ sudo apt-get update -qq
 sudo apt-get upgrade -qq
 
 sudo oem-config-prepare --quiet
-#sudo poweroff
 
 trap : 0
 
@@ -299,4 +298,8 @@ echo >&2 '
 ************
 '
 
-reboot
+read -p "Do you want to power off? (Yy)" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    sudo poweroff
+fi

@@ -60,3 +60,9 @@ echo >&2 '
 *** DONE *** 
 ************
 '
+
+read -p "Do you want to restart? (Yy)" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    sudo reboot
+fi
