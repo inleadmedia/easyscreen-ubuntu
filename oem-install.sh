@@ -36,6 +36,8 @@ sudo apt-get install curl -qq
 sudo apt-get install build-essential -qq
 sudo apt-get install libssl-dev -qq
 sudo apt-get install git -qq
+sudo apt-get install yad -qq
+sudo apt-get install mailutils -qq
 
 echo "$TIMESTAMP # See Hidden Startup Applications"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
@@ -298,8 +300,5 @@ echo >&2 '
 ************
 '
 
-read -p "Do you want to power off? (Yy)" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    sudo poweroff
-fi
+sleep 5
+sudo poweroff

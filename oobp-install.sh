@@ -65,25 +65,6 @@ Session=kiosk
 EOF
 
 
-
-echo "$TIMESTAMP # Create autostart"
-sudo -u kiosk mkdir -p /home/kiosk/.config
-sudo -u kiosk mkdir -p /home/kiosk/.config/autostart
-sudo -u kiosk touch /home/kiosk/.config/gnome-initial-setup-done 
-
-sudo -u kiosk tee /home/kiosk/.config/autostart/kiosk.desktop >/dev/null <<'EOF'
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Kiosk
-Exec=/home/kiosk/kiosk.sh
-X-GNOME-Autostart-enabled=true
-EOF
-
-sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
-sudo chmod +x /home/kiosk/kiosk.sh
-
-
 echo "$TIMESTAMP # Network policy"
 sudo tee /etc/polkit-1/localauthority/50-local.d/10-network-manager.pkla >/dev/null <<'EOF'
 [Let user kiosk modify system settings for network]
@@ -94,6 +75,22 @@ ResultInactive=no
 ResultActive=yes
 EOF
 
+echo "$TIMESTAMP # Create autostart"
+sudo -u kiosk mkdir -p /home/kiosk/.config
+sudo -u kiosk mkdir -p /home/kiosk/.config/autostart
+sudo -u kiosk touch /home/kiosk/.config/gnome-initial-setup-done 
+sudo -u kiosk tee /home/kiosk/.config/autostart/conf.desktop >/dev/null <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Configuration Manager
+Exec=/bin/bash /home/kiosk/conf.sh
+X-GNOME-Autostart-enabled=true
+EOF
+
+sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf.sh
+sudo -u kiosk chmod +x /home/kiosk/conf.sh
+
 trap : 0
 
 echo >&2 '
@@ -102,8 +99,11 @@ echo >&2 '
 ************
 '
 
-read -p "Do you want to restart? (Yy)" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    sudo reboot
-fi
+while true; do
+    read -p "Do you want to restart? (Yy)" yn
+    case $yn in
+        [Yy]* ) sudo reboot;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
