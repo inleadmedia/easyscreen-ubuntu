@@ -37,6 +37,8 @@ sudo apt-get install build-essential -qq
 sudo apt-get install libssl-dev -qq
 sudo apt-get install git -qq
 sudo apt-get install yad -qq
+sudo apt-get install oem-config -qq
+ # @TODO This should be done quietly without prompt.
 sudo apt-get install mailutils -qq
 
 echo "$TIMESTAMP # See Hidden Startup Applications"
@@ -56,6 +58,13 @@ sudo apt install -y ./google-chrome-stable_current_amd64.deb -qq
 echo "$TIMESTAMP # Install TeamViewer"
 sudo wget -q https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
 sudo apt install -y ./teamviewer-host_amd64.deb -qq
+sudo teamviewer --passwd 4MenFromMars
+sudo teamviewer --daemon stop
+sudo tee -a /opt/teamviewer/config/global.conf >/dev/null <<'EOF'
+[int32] Always_Online = 1
+[int32] EulaAccepted = 1
+[int32] EulaAcceptedRevision = 6
+EOF
 
 echo "$TIMESTAMP # Disable screen tearing"
 sudo tee -a /usr/share/X11/xorg.conf.d/20-intel.conf >/dev/null <<'EOF'
