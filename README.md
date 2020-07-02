@@ -14,11 +14,12 @@ Do the installation in "next-next-next" style until the installation is ready an
 wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/oem-install.sh | sudo bash
 ```
 
-Wait until the terminal ask for the password of the user and input it. The machine will shutdown and is ready for install.
+Wait until the terminal ask for the password of the user and input it. The machine will reboot and is ready for installation.
 
 ## Installation (OOBP)
 
-Power on the machine and proceed with the installation. Go through the installation process setting the following details. Note, that this repo is work in process and these details are for the target environment. This repo will be made more modular and portable later.
+Wait for the machine to reboot and proceed with the installation. Go through the installation process setting the following details.
+Note, that this repo is work in process and these details are for the target environment. This repo will be made more modular and portable later.
 - Language: English
 - Install third party software: yes
 - Timezone: Copenhagen
@@ -28,32 +29,20 @@ Power on the machine and proceed with the installation. Go through the installat
   - Computer name: inlead-kiosk-XXX
   - Username: inlead
   - Password: [predefined value]
-  - Log in automatically
+  - [x] Log in automatically
 
 Do the installation in "next-next-next" style until the installation is ready and the system wants to reboot. When the machine computer has rebooted, run the following command: 
 ```
 wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/oobp-install.sh | sudo bash
 ```
 
-Wait until the terminal says that it's safe to reboot. Now reboot and from that boot on, the computer should match the current description.
-
-## Preparation (kiosk)
-
-When the machine computer has rebooted, run the following command: 
-```
-wget -qO- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh | sudo bash -s [AUTH_TOKEN] /home/kiosk/es-linux-app https://v3.lms.inlead.ws [VERSION] 123456789
-```
-
-Wait until the terminal says that it's safe to reboot. Now reboot and from that boot on, the computer is ready for production.
+Wait until the terminal says that it's safe to shutdown. Confirm that you would like to shutdown, and from this point on, the computer is ready for production.
 
 
 ## Configuration
 
-Temporarily, you will have to.
-* Edit `/home/kiosk/kiosk.sh#L50` with the proper URL to spawn in Chrome
-* Gather TeamViewer information
-  * Settings -> Security -> Personal password -> [Change passsword] -> XXX -> [Apply]
-  * Gather the "Your ID"
+In order to configure the computer, the Configuration Manager needs to run (TBD).
+
 
 # Known issues
 Some computers come with a predefined Onboard display output. In the process of installing OEM, you might need to press `Super`+`P` multiple times, until the display you are using becomes active.
