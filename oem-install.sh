@@ -39,6 +39,8 @@ sudo apt-get install git -qq
 sudo apt-get install yad -qq
 sudo apt-get install oem-config -qq
  # @TODO This should be done quietly without prompt.
+debconf-set-selections <<< "postfix postfix/mailname string easyscreen-display"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" 
 sudo apt-get install mailutils -qq
 
 echo "$TIMESTAMP # See Hidden Startup Applications"
