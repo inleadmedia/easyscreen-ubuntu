@@ -20,6 +20,10 @@ TIMESTAMP=`date "+%Y-%m-%d %H:%M:%S"`
 
 ### OOBP
 
+echo "$TIMESTAMP # Install and upgrade software"
+sudo apt-get update -qq
+sudo apt-get upgrade -qq
+
 echo "$TIMESTAMP # Create user"
 sudo su -c "groupadd kiosk"
 sudo su -c "useradd kiosk -s /bin/bash -d /home/kiosk/ -m -g kiosk"
