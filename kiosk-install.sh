@@ -57,6 +57,10 @@ EOF
 sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/kiosk.sh
 sudo chmod +x /home/kiosk/kiosk.sh
 
+sudo -u kiosk rm -rf /home/kiosk/.config/autostart/conf.desktop
+
+echo "$TIMESTAMP # ALL DONE - please click OK"
+
 trap : 0
 
 echo >&2 '
@@ -64,7 +68,3 @@ echo >&2 '
 *** DONE *** 
 ************
 '
-
-sudo -u kiosk rm -rf /home/kiosk/.config/autostart/conf.desktop
-sleep 2
-#sudo reboot
