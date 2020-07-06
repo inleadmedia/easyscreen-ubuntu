@@ -46,6 +46,18 @@ checkConnection() {
     fi
 }
 
+finalizeInstall() {
+     # Send TeamViewer ID to Inlead
+     curl --silent --output /home/kiosk/conf.txt ifconfig.io && cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/conf.txt
+     sleep 2
+     mail -s 'New ES Device' support@inlead.dk < /home/kiosk/conf.txt
+     
+     # @TODO do stuff with values from yad form
+     
+     sleep 1
+     reboot
+}
+
 if [[ ! -e $SUCCESSFILE ]]; then
     # Check internet connection
     checkConnection "1"
@@ -114,18 +126,17 @@ else
         --plug=$CKEY --tabnum=4 --form --separator='\n' --quoted-output \
         --date-format="%H %M" \
         --field="Any hardware needed?":CHK &
-        # @TODO This should call conf-hw.sh with timestamps
+        # @TODO This should call conf-hw.sh if checked
 
     # Main dialog
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_CONF\n" \
                 --notebook --key=$CKEY --tab="Configuration" --tab="Client" --tab="Schedule" --tab="Hardware" \
                 --buttons-layout=center \
                 --button="gtk-cancel":0 --button="gtk-apply:1"
-
-     # Send TeamViewer ID to Inlead
-     curl --silent --output /home/kiosk/conf.txt ifconfig.io && cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/conf.txt
-     sleep 2
-     mail -s 'New ES Device' support@inlead.dk < /home/kiosk/conf.txt
+                   case $? in
+                      1)
+                      finalizeInstall
+                   esac
 
 fi
 
