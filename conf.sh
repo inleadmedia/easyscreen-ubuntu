@@ -50,7 +50,7 @@ if [[ ! -e $SUCCESSFILE ]]; then
     # Check internet connection
     checkConnection "1"
 
-    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk-install.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh
+    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk-install.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/kiosk-install.sh
     sudo chmod +x /home/kiosk/kiosk-install.sh
     
     # @TODO This is not error prune atm

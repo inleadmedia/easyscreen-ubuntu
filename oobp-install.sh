@@ -88,7 +88,7 @@ Exec=/bin/bash /home/kiosk/conf.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
-sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf.sh
+sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/conf.sh
 sudo -u kiosk chmod +x /home/kiosk/conf.sh
 
 trap : 0
