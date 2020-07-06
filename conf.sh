@@ -80,6 +80,9 @@ if [[ ! -e $SUCCESSFILE ]]; then
     touch $SUCCESSFILE
 
 else
+    # Check internet connection
+    checkConnection "1"
+    
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_WELCOME\n" \
                 --form --align=left \
                 --button="gtk-close:1" --button="gtk-ok":0 \
@@ -87,9 +90,6 @@ else
 
                foo=$?
                [[ $foo -eq 1 ]] && exit 0
-
-    # Check internet connection
-    checkConnection "1"
 
     # Configuration
     CKEY=$(($RANDOM * $$))
