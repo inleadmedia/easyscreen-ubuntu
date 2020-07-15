@@ -71,10 +71,11 @@ if [[ ! -e $SUCCESSFILE ]]; then
                 --text-info --tail --back=black --fore=white --fontname="Monospace 10" > /home/kiosk/installlog.txt \
                 --align=left \
                 --button="gtk-ok":0 \
+				--button="Exit": \
                 --buttons-layout=end
                 
                bar=$?
-               [[ $bar -eq 0 ]] && exit 0
+               [[ $bar -eq 0 ]] && reload
 
     # @TODO This should only be set if above is successfull
     touch $SUCCESSFILE
