@@ -104,9 +104,11 @@ else
 
     # Screen setup page
     # @TODO This is supposed to be fetched from the internet
-    clients=$(echo "herbib!bronbib!slagbib!tysbib!berbib")
-    screens=$(echo "Indgang v. receptionen!Børneafdelingen!Voksen, krimi! Voksen, auditorium!Voksen 4")
-
+    #clients=$(echo "herbib!bronbib!slagbib!tysbib!berbib")
+	clients=$(curl -sS http://storage.easyting.dk/es-clients2.json| jq -r '[.clients[].nick] | @tsv' > /home/kiosk/client.txt && sed 's/\t/!/g' -i /home/kiosk/client.txt && echo "$(</home/kiosk/client.txt)")
+    #screens=$(echo "Indgang v. receptionen!Børneafdelingen!Voksen, krimi! Voksen, auditorium!Voksen 4")
+	#MK - to do format output now it's display's as an array
+	screens=$(curl -sS http://storage.easyting.dk/es-clients2.json | jq '.clients[] | select (.nick == "$clients") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > screen.txt && echo "$(<screen.txt)")
     yad \
         --plug=$CKEY --tabnum=2 --form --separator='\n' --quoted-output \
         --field="Client":CB "$clients" \
