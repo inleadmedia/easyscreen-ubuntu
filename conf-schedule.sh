@@ -21,7 +21,7 @@ EOF
 sudo -u kiosk tee /etc/systemd/system/auto-resume.timer >/dev/null <<'EOF'
 [Unit]
 Description=Automatically resume on a schedule
-		
+
 [Timer]
 OnCalendar=*-*-* 06:30:00
 WakeSystem=true
@@ -34,7 +34,8 @@ sudo -u kiosk tee /etc/systemd/system/auto-resume.service >/dev/null <<'EOF'
 Description=Does nothing
 [Service]
 Type=oneshot
-ExecStart=/bin/true
+ExecStartPre=/bin/bash -c '/bin/true && /bin/sleep 60'
+ExecStart=/bin/bash -c '/bin/systemctl reboot'
 EOF
 
 sudo -u kiosk systemctl enable auto-suspend.timer
