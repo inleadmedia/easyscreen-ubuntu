@@ -1,5 +1,8 @@
 #!/bin/bash
-
+#set -x
+#exec 3>&1 4>&2
+#trap 'exec 2>&4 1>&3' 0 1 2 3
+#exec 1>/tmp/kiosk-install.out 2>&1
 abort()
 {
     echo >&2 '
@@ -68,3 +71,5 @@ echo >&2 '
 *** DONE *** 
 ************
 '
+sudo -u kiosk touch /home/kiosk/easyscreen-initial-setup-done
+#set +x

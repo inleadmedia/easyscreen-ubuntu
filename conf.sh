@@ -1,5 +1,10 @@
 
 #!/bin/sh
+#set -x
+#exec 3>&1 4>&2
+#trap 'exec 2>&4 1>&3' 0 1 2 3
+#exec 1>/tmp/conf.out 2>&1
+
 GTK_THEME=Adwaita
 SUCCESSFILE=/home/kiosk/easyscreen-initial-setup-done
 
@@ -61,17 +66,17 @@ finalizeInstall() {
 if [[ ! -e $SUCCESSFILE ]]; then
     # Check internet connection
     checkConnection "1"
-
+    sleep 2
     sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk-install.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/kiosk-install.sh
     sudo chmod +x /home/kiosk/kiosk-install.sh
-    
-    # @TODO This is not error prune atm
+    sleep 2
+	# @TODO This is not error prune atm
     /home/kiosk/kiosk-install.sh | \
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_INSTALL\n" \
                 --text-info --tail --back=black --fore=white --fontname="Monospace 10" > /home/kiosk/installlog.txt \
                 --align=left \
                 --button="gtk-ok":0 \
-				--button="Exit": \
+				--button="Exit" \
                 --buttons-layout=end
                 
                bar=$?
@@ -142,5 +147,5 @@ else
                    esac
 
 fi
-
+#set +x
 exit 0

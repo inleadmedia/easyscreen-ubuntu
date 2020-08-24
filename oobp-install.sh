@@ -92,19 +92,24 @@ Exec=/bin/bash /home/kiosk/conf.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
+sleep 5
 sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/conf.sh
 sudo -u kiosk chmod +x /home/kiosk/conf.sh
+sleep 10
 
 trap : 0
 
 echo >&2 '
 ************
-*** DONE *** 
+*** DONE ***
 ************
 '
+sleep 2
+clear
 
+echo "Are you sure you want to reboot [y/n]"
 while true; do
-    read -p "Do you want to restart? (Yy)" yn
+	read yn
     case $yn in
         [Yy]* ) sudo reboot;;
         [Nn]* ) exit;;
