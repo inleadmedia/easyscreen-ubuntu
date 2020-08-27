@@ -41,10 +41,10 @@ sudo apt-get install jq -qq
 sudo apt-get install oem-config -qq
 
  # @TODO This should be done quietly without prompt.
-debconf-set-selections <<< "postfix postfix/mailname string easyscreen-display"
-debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" 
+sudo debconf-set-selections <<< "postfix postfix/mailname string easyscreen-display"
+sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" 
 sudo apt-get install mailutils -qq
-sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/reload -P /usr/bin/ && chmod +x /usr/bin/reload
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/reload -P /usr/bin/ && sudo chmod +x /usr/bin/reload
 
 echo "$TIMESTAMP # See Hidden Startup Applications"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
