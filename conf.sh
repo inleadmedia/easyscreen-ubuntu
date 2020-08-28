@@ -124,10 +124,8 @@ else
     yad \
         --plug=$CKEY --tabnum=3 --form --separator='\n' --quoted-output \
         --date-format="%H %M" \
-        --field="Auto-shutdown?":CHK \
-        --field="Shutdown":CB \
-        --field="Startup":CB "19:00!19:30!20:00!20:30!21:00!21:30!22:00!22:30!23:00!23:30!00:00!00:30!01:00!01:30!02:00" "05:00!05:30!06:00!06:30!07:00!07:30!08:00!08:30" &
-        # @TODO This should call conf-schedule.sh with timestamps
+		--field="Auto-shutdown?":FBTN "schedule" &
+        # done
 
     # Hardware
     yad \
