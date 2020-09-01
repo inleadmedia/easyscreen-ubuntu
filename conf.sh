@@ -108,15 +108,14 @@ else
 
     # Screen setup page
     # @TODO This is supposed to be fetched from the internet
-    clients=$(curl -sS http://storage.easyting.dk/es-clients2.json| jq -r '[.clients[].nick] | @tsv' > /home/kiosk/clients.txt && sed 's/\t/!/g' -i /home/kiosk/clients.txt && echo "$(</home/kiosk/clients.txt)")
+    #clients=$(curl -sS http://storage.easyting.dk/es-clients2.json| jq -r '[.clients[].nick] | @tsv' > /home/kiosk/clients.txt && sed 's/\t/!/g' -i /home/kiosk/clients.txt && echo "$(</home/kiosk/clients.txt)")
     # @TODO MK - to do format output now it's display's as an array
-    screens=$(curl -sS http://storage.easyting.dk/es-clients2.json | jq '.clients[] | select (.nick == "$clients") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > clients-screens.txt && echo "$(<clients-screens.txt)")
+    #screens=$(curl -sS http://storage.easyting.dk/es-clients2.json | jq '.clients[] | select (.nick == "$clients") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > clients-screens.txt && echo "$(<clients-screens.txt)")
 
 yad \
         --plug=$CKEY --tabnum=2 --form --separator='\n' --quoted-output \
-        --field="Client":CB "$clients" \
-        --field="Screen":CB "$screens" &
-        # @TODO This should set URL in kiosk.sh
+        --field="Client":FBTN "clients" \
+        --field="Screen":FBTN "screens" &
 
     # Schedule page
     yad \

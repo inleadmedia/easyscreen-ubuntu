@@ -1,0 +1,14 @@
+#!/bin/bash
+clients=$(curl -sS http://clients.easyscreen.io/api/clients| jq -r '[.data[].nick] | @tsv' > /home/kiosk/client.txt && sed 's/\t/!/g' -i /home/kiosk/client.txt && echo "$(</home/kiosk/client.txt)")
+
+
+TEXTHEADER="Select Client Name"
+values=( $(yad --form --center --width=300 --text-align=center --height=100 --align=left --text="$TEXTHEADER" --center --title="Client Select" --separator=' ' \
+        --button=Skip:1 \
+        --button=Apply:0 \
+        --field="Client":CB "$clients"\
+            ) )
+
+if [ $? -eq 0 ]; then
+    sudo -u kiosk echo "${values[0]}" > /home/kiosk/clients.txt
+fi

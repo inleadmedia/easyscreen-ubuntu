@@ -18,8 +18,7 @@ unclutter &
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/google-chrome/Default/Preferences
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/google-chrome/Default/Preferences
 
-# @TODO Should be set by conf.sh
-CLIENTURL="https://admin-esbbib.easyscreen.io/web/"
+CLIENTURL=$(cat /home/kiosk/screen2.txt)
 
 # Check connection and run Chrome
 sleep 3s
