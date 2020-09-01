@@ -53,9 +53,9 @@ checkConnection() {
 
 finalizeInstall() {
      # Send TeamViewer ID to Inlead
-     curl --silent --output /home/kiosk/conf.txt ifconfig.io && cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/conf.txt
+     curl --silent --output /home/kiosk/teamviewer-details.txt ifconfig.io && cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/teamviewer-details.txt
      sleep 2
-     mail -s 'New ES Device' support@inlead.dk < /home/kiosk/conf.txt
+     mail -s 'New ES Device' support@inlead.dk < /home/kiosk/teamviewer-details.txt
      
      # @TODO do stuff with values from yad form
      
@@ -73,10 +73,9 @@ if [[ ! -e $SUCCESSFILE ]]; then
 	# @TODO This is not error prune atm
     /home/kiosk/kiosk-install.sh | \
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_INSTALL\n" \
-                --text-info --tail --back=black --fore=white --fontname="Monospace 10" > /home/kiosk/installlog.txt \
+                --text-info --tail --back=black --fore=white --fontname="Monospace 10" > /home/kiosk/install-log.txt \
                 --align=left \
-                --button="gtk-ok":0 \
-				--button="Exit" \
+                --button="gtk-ok":0 --button="Exit" \
                 --buttons-layout=end
                 
                bar=$?
@@ -109,12 +108,11 @@ else
 
     # Screen setup page
     # @TODO This is supposed to be fetched from the internet
-    #clients=$(echo "herbib!bronbib!slagbib!tysbib!berbib")
-	clients=$(curl -sS http://storage.easyting.dk/es-clients2.json| jq -r '[.clients[].nick] | @tsv' > /home/kiosk/client.txt && sed 's/\t/!/g' -i /home/kiosk/client.txt && echo "$(</home/kiosk/client.txt)")
-    #screens=$(echo "Indgang v. receptionen!Børneafdelingen!Voksen, krimi! Voksen, auditorium!Voksen 4")
-	#MK - to do format output now it's display's as an array
-	screens=$(curl -sS http://storage.easyting.dk/es-clients2.json | jq '.clients[] | select (.nick == "$clients") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > screen.txt && echo "$(<screen.txt)")
-    yad \
+    clients=$(curl -sS http://storage.easyting.dk/es-clients2.json| jq -r '[.clients[].nick] | @tsv' > /home/kiosk/clients.txt && sed 's/\t/!/g' -i /home/kiosk/clients.txt && echo "$(</home/kiosk/clients.txt)")
+    # @TODO MK - to do format output now it's display's as an array
+    screens=$(curl -sS http://storage.easyting.dk/es-clients2.json | jq '.clients[] | select (.nick == "$clients") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > clients-screens.txt && echo "$(<clients-screens.txt)")
+
+yad \
         --plug=$CKEY --tabnum=2 --form --separator='\n' --quoted-output \
         --field="Client":CB "$clients" \
         --field="Screen":CB "$screens" &
@@ -124,8 +122,7 @@ else
     yad \
         --plug=$CKEY --tabnum=3 --form --separator='\n' --quoted-output \
         --date-format="%H %M" \
-		--field="Auto-shutdown?":FBTN "schedule" &
-        # done
+        --field="Auto-shutdown?":FBTN "schedule" &
 
     # Hardware
     yad \
