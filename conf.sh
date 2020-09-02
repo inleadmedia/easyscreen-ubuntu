@@ -126,7 +126,7 @@ yad \
     yad \
         --plug=$CKEY --tabnum=3 --form --separator='\n' --quoted-output \
         --date-format="%H %M" \
-        --field="Auto-shutdown?":FBTN "schedule" &
+        --field="Auto-shutdown?":FBTN "sudo schedule" &
 
     # Hardware
     yad \
