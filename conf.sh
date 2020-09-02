@@ -55,7 +55,13 @@ finalizeInstall() {
      # Send TeamViewer ID to Inlead
      curl --silent --output /home/kiosk/teamviewer-details.txt ifconfig.io && cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/teamviewer-details.txt
      sleep 2
-     mail -s 'New ES Device' support@inlead.dk < /home/kiosk/teamviewer-details.txt
+	 #Client name
+	 cat /home/kiosk/clients.txt >> /home/kiosk/teamviewer-details.txt
+	 #Screen Name
+	 cat /home/kiosk/screens_1.txt >> /home/kiosk/teamviewer-details.txt
+	 #Screen URL
+	 cat /home/kiosk/screen2.txt >> /home/kiosk/teamviewer-details.txt
+	 mail -s 'New ES Device' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/teamviewer-details.txt
      
      # @TODO do stuff with values from yad form
      

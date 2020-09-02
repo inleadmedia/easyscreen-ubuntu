@@ -44,6 +44,8 @@ sudo apt-get install oem-config -qq
 sudo debconf-set-selections <<< "postfix postfix/mailname string easyscreen-display"
 sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" 
 sudo apt-get install mailutils -qq
+sudo sed -i 's/inet_protocols = all/inet_protocols = ipv4/g' /etc/postfix/main.cf
+sudo service postfix restart
 sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/reload -P /usr/bin/ && sudo chmod +x /usr/bin/reload
 sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/schedule -P /usr/bin/ && sudo chmod +x /usr/bin/schedule
 sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/clients -P /usr/bin/ && sudo chmod +x /usr/bin/clients
