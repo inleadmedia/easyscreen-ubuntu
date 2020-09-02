@@ -59,5 +59,6 @@ echo >&2 '
 *** DONE *** 
 ************
 '
+echo "$TIMESTAMP # Create SUCCESSFILE"
 sudo -u kiosk touch /home/kiosk/easyscreen-initial-setup-done
 #set +x

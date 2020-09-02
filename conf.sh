@@ -71,9 +71,9 @@ if [[ ! -e $SUCCESSFILE ]]; then
     sudo chmod +x /home/kiosk/kiosk-install.sh
     sleep 2
 	# @TODO This is not error prune atm
-    /home/kiosk/kiosk-install.sh | \
+    /home/kiosk/kiosk-install.sh | tee -a /home/kiosk/install-log.txt | \
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_INSTALL\n" \
-                --text-info --tail --back=black --fore=white --fontname="Monospace 10" > /home/kiosk/install-log.txt \
+                --text-info --tail --back=black --fore=white --fontname="Monospace 10" \
                 --align=left \
                 --button="gtk-ok":0 --button="Exit" \
                 --buttons-layout=end
@@ -82,7 +82,6 @@ if [[ ! -e $SUCCESSFILE ]]; then
                [[ $bar -eq 0 ]] && reload
 
     # @TODO This should only be set if above is successfull
-    touch $SUCCESSFILE
 
 else
     # Check internet connection
