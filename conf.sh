@@ -50,15 +50,15 @@ finalizeInstall() {
     # Send information about this device to Inlead
 
     # Fetch client name
-    cat /home/kiosk/client-name.txt >> /home/kiosk/mail-details.txt
+    cat /home/kiosk/client-name.txt | sed 's/^/Client:/' >> /home/kiosk/mail-details.txt
     # Fetch screen name
-    cat /home/kiosk/screen-name.txt >> /home/kiosk/mail-details.txt
+    cat /home/kiosk/screen-name.txt | sed 's/^/Screen:/' >> /home/kiosk/mail-details.txt
     # Fetch screen URL
-    cat /home/kiosk/screen-url.txt >> /home/kiosk/mail-details.txt
+    cat /home/kiosk/screen-url.txt | sed 's/^/URL:/' >> /home/kiosk/mail-details.txt
     # Fetch Client IP
-    curl --silent --output /home/kiosk/mail-details.txt ifconfig.io >> /home/kiosk/mail-details.txt
+    curl --silent --output /home/kiosk/mail-details.txt ifconfig.io | sed 's/^/IP:/' >> /home/kiosk/mail-details.txt
     # Fetch TeamViewer ID
-    cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/mail-details.txt
+    cat .config/teamviewer/client.conf |grep ClientIDOfTSUser | sed 's/^/TW:/' >> /home/kiosk/mail-details.txt
 
     mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/mail-details.txt
 
