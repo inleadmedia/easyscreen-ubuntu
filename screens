@@ -1,21 +1,21 @@
 #!/bin/bash
-clients=$(cat /home/kiosk/clients.txt)
-screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > screen.txt && echo "$(<screen.txt)")
-#screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens | keys |@csv' | sed 's/\\//g' | sed 's/,/!/g' | sed 's/"//' | sed 's/.$//' > screen.txt && echo "$(<screen.txt)")
-screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens' | tr -d '",' > /home/kiosk/screen1.txt)
-#url=$(cat /home/kiosk/screens_1.txt)
 
-TEXTHEADER="Select Client Name"
-values=( $(yad --form --center --width=300 --text-align=center --height=100 --align=left --text="$TEXTHEADER" --center --title="Client Select" --separator='!' \
-        --button=Skip:1 \
-        --button=Apply:0 \
+clients=$(cat /home/kiosk/client-name.txt)
+screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen.txt && echo "$(<screen.txt)")
+screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens' | tr -d '",' > /home/kiosk/screen-details.txt)
+
+
+TEXTHEADER="Choose your Screen"
+TEXTTITLE="Screen selection"
+values=( $(yad --form --center --width=300 --text-align=center --height=100 --align=left --text="$TEXTHEADER" --center --title="$TEXTTITLE" --separator='!' \
+        --button=Skip:1 --button=Apply:0 \
         --field="Screen":CB "${screens[@]}"\
             ) )
 
 if [ $? -eq 0 ]; then
-        sudo echo "${values[@]}" | sed 's/.$//' > /home/kiosk/screens_1.txt
+    sudo -u kiosk echo "${values[@]}" | sed 's/.$//' > /home/kiosk/screen-name.txt
 fi
 
-url=$(cat /home/kiosk/screens_1.txt)
-cat /home/kiosk/screen1.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen2.txt
+url=$(cat /home/kiosk/screen-name.txt)
+cat /home/kiosk/screen-details.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen-url.txt
 exit

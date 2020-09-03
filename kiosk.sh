@@ -18,7 +18,7 @@ unclutter &
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/google-chrome/Default/Preferences
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/google-chrome/Default/Preferences
 
-CLIENTURL=$(cat /home/kiosk/screen2.txt)
+CLIENTURL=$(cat /home/kiosk/screen-url.txt)
 
 # Check connection and run Chrome
 sleep 3s

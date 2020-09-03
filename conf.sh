@@ -1,9 +1,4 @@
-
 #!/bin/sh
-#set -x
-#exec 3>&1 4>&2
-#trap 'exec 2>&4 1>&3' 0 1 2 3
-#exec 1>/tmp/conf.out 2>&1
 
 GTK_THEME=Adwaita
 SUCCESSFILE=/home/kiosk/easyscreen-initial-setup-done
@@ -15,11 +10,11 @@ YAD=(
 )
 TEXTHEADER="<span size='x-large' font_weight='bold'>Configuration Manager</span>\n"
 
-TEXT_WELCOME="Welcome to the configuration process of easyScreen.\nWe are going through a 6-step procecure to finish your installation.\n\nThis should not take more than 3 minutes.\n\nPlease press the button below when you are ready to start."
+TEXT_WELCOME="Welcome to the configuration process of easyScreen.\nYou will need to configure your device in order to finish your installation.\n\nThis should not take more than 3 minutes.\n\nPlease press OK when you are ready to start.\n\nWhen you finish, the computer will restart and is ready."
 TEXT_INTERNET="Checking your current internet connection, please wait..."
 TEXT_NOCONN="It seems like you are not connected to the internet.\n\nPlease configure your Wi-Fi or Cable in order to proceed:"
-TEXT_CONF="Configure your display, date and sound settings as preferred before proceeding:"
-TEXT_INSTALL="This is the first time you run the Configuration Manager. We will do some installments before you can proceed. \nGive us a few minutes, and we'll restart the computer for you.."
+TEXT_CONF="Configure your display, date and sound settings of the computer and proceed with selecting your Library and the Screen that you would like to display on this device."
+TEXT_INSTALL="This is the first time you run the Configuration Manager.\n\nWe will do some adjustments before you can proceed, hang on for a few seconds and press OK.."
 
 checkConnection() {
     (
@@ -52,21 +47,23 @@ checkConnection() {
 }
 
 finalizeInstall() {
-     # Send TeamViewer ID to Inlead
-     curl --silent --output /home/kiosk/teamviewer-details.txt ifconfig.io && cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/teamviewer-details.txt
-     sleep 2
-	 #Client name
-	 cat /home/kiosk/clients.txt >> /home/kiosk/teamviewer-details.txt
-	 #Screen Name
-	 cat /home/kiosk/screens_1.txt >> /home/kiosk/teamviewer-details.txt
-	 #Screen URL
-	 cat /home/kiosk/screen2.txt >> /home/kiosk/teamviewer-details.txt
-	 mail -s 'New ES Device' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/teamviewer-details.txt
-     
-     # @TODO do stuff with values from yad form
-     
-     sleep 1
-     reboot
+    # Send information about this device to Inlead
+
+    # Fetch client name
+    cat /home/kiosk/client-name.txt >> /home/kiosk/mail-details.txt
+    # Fetch screen name
+    cat /home/kiosk/screen-name.txt >> /home/kiosk/mail-details.txt
+    # Fetch screen URL
+    cat /home/kiosk/screen-url.txt >> /home/kiosk/mail-details.txt
+    # Fetch Client IP
+    curl --silent --output /home/kiosk/mail-details.txt ifconfig.io >> /home/kiosk/mail-details.txt
+    # Fetch TeamViewer ID
+    cat .config/teamviewer/client.conf |grep ClientIDOfTSUser >> /home/kiosk/mail-details.txt
+
+    mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/mail-details.txt
+
+    sleep 1
+    reboot
 }
 
 if [[ ! -e $SUCCESSFILE ]]; then
@@ -112,12 +109,7 @@ else
         --field="Sound!multimedia-volume-control":FBTN "gnome-control-center sound" &
 
     # Screen setup page
-    # @TODO This is supposed to be fetched from the internet
-    #clients=$(curl -sS http://storage.easyting.dk/es-clients2.json| jq -r '[.clients[].nick] | @tsv' > /home/kiosk/clients.txt && sed 's/\t/!/g' -i /home/kiosk/clients.txt && echo "$(</home/kiosk/clients.txt)")
-    # @TODO MK - to do format output now it's display's as an array
-    #screens=$(curl -sS http://storage.easyting.dk/es-clients2.json | jq '.clients[] | select (.nick == "$clients") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g'  > clients-screens.txt && echo "$(<clients-screens.txt)")
-
-yad \
+    yad \
         --plug=$CKEY --tabnum=2 --form --separator='\n' --quoted-output \
         --field="Client":FBTN "clients" \
         --field="Screen":FBTN "screens" &
@@ -146,5 +138,4 @@ yad \
                    esac
 
 fi
-#set +x
 exit 0
