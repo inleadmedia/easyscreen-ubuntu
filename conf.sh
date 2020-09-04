@@ -47,8 +47,22 @@ checkConnection() {
 }
 
 finalizeInstall() {
-    # Send information about this device to Inlead
+    # Create autostart
+    sudo -u kiosk tee /home/kiosk/.config/autostart/kiosk.desktop >/dev/null <<'EOF'
+    [Desktop Entry]
+    Version=1.0
+    Type=Application
+    Name=Kiosk
+    Exec=/home/kiosk/kiosk.sh
+    X-GNOME-Autostart-enabled=true
+    EOF
 
+    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/kiosk.sh
+    sudo chmod +x /home/kiosk/kiosk.sh
+
+    sudo -u kiosk rm -rf /home/kiosk/.config/autostart/conf.desktop
+
+    # Send information about this device to Inlead
     # Fetch client name
     cat /home/kiosk/client-name.txt | sed 's/^/Client:/' >> /home/kiosk/mail-details.txt
     # Fetch screen name
