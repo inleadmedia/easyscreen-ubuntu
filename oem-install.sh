@@ -379,10 +379,10 @@ Exec=/bin/bash /home/kiosk/conf.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
-sleep 5
+sleep 2
 sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/conf.sh
 sudo -u kiosk chmod +x /home/kiosk/conf.sh
-sleep 10
+sleep 3
 
 trap : 0
 

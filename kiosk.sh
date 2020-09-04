@@ -21,7 +21,8 @@ sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/googl
 CLIENTURL=$(cat /home/kiosk/screen-url.txt)
 
 # Check connection and run Chrome
-sleep 3s
+sleep 2s
+
 fnCheckConnection() {
 	notify-send 'Screen Setup' 'Verifying the internet connection.' -t 3000
 	sleep 2s
@@ -30,7 +31,7 @@ fnCheckConnection() {
 
 	if [ ! -s /tmp/index.google ];then
 		notify-send 'Screen Setup' 'Cannot connect to the internet. Re-attempting...' -t 3000
-		sleep 4s
+		sleep 2s
 		fnCheckConnection `expr $1 + 1`
 	else
 		notify-send 'Screen setup' 'Connected to the internet. Opening the screen' -t 3000
@@ -49,7 +50,7 @@ fnCheckConnection() {
 #		sleep 1
 		# Restart TW
 		sudo teamviewer daemon restart
-		sleep 3s
+		sleep 2s
 #		# Get TW ID
 #		TWID="$(grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' .config/teamviewer/client.conf)";
 #		reg="s/teamViewerId\" value=\"/&$TWID/";

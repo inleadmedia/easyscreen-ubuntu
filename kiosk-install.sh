@@ -15,10 +15,6 @@ trap 'abort' 0
 
 set -e
 
-# Restart TW
-sudo teamviewer daemon restart
-sleep 3s
-
 ### KIOSK
 
 echo "$TIMESTAMP # Disable Gestures"
