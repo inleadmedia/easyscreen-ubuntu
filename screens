@@ -1,8 +1,7 @@
 #!/bin/bash
-
 clients=$(cat /home/kiosk/client-name.txt)
-screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen.txt && echo "$(<screen.txt)")
-screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients | jq '.data[] | select (.nick == "'$clients'") | .screens' | tr -d '",' > /home/kiosk/screen-details.txt)
+screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name==$clients) | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen.txt && echo "$(<screen.txt)")
+screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients| jq --arg clients "$clients" '.data[] | select (.name ==$clients) | .screens' | tr -d '",' > /home/kiosk/screen-details.txt)
 
 
 TEXTHEADER="Choose your Screen"
