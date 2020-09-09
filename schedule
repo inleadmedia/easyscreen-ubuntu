@@ -1,8 +1,16 @@
 #!/bin/bash
+
 TEXTHEADER="Schedule a time for Auto - Shutdown/Startup of the screen"
-values=( $(yad --form --center --width=300 --text-align=center --height=150 --align=left --text="$TEXTHEADER" --center --title="Time Schedule" --separator=' ' \
-        --button=Skip:1 \
-        --button=Apply:0 \
+
+YAD=(
+    yad \
+        --title=$TITLE --width=350 --height=150 --align=left --center \
+        --skip-taskbar --borders=10 --no-escape --always-print-result --splash --text-align=center
+)
+
+values=( $("${YAD[@]}" --text="$TEXTHEADER" \
+        --form --align=left --separator=' ' \
+        --button="gtk-cancel:1" --button="gtk-apply:0" \
         --field="Shutdown":CB \
             '19:00:00!19:30:00!20:00:00!20:30:00!21:00:00!21:30:00!22:00:00!22:30:00!23:00:00!23:30:00!00:00:00!00:30:00!01:00:00!01:30:00!02:00:00' \
         --field="Startup":CB \

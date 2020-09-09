@@ -1,13 +1,21 @@
 #!/bin/bash
-clients=$(cat /home/kiosk/client-name.txt)
-screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name==$clients) | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen.txt && echo "$(<screen.txt)")
-screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients| jq --arg clients "$clients" '.data[] | select (.name ==$clients) | .screens' | tr -d '",' > /home/kiosk/screen-details.txt)
 
+clients=$(cat /home/kiosk/client-name.txt)
+
+screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name==$clients) | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen-names.txt && echo "$(<screen-names.txt)")
+screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name ==$clients) | .screens' | tr -d '",' > /home/kiosk/screens-available.txt)
+
+YAD=(
+    yad \
+        --title=$TITLE --width=350 --height=150 --align=left --center \
+        --skip-taskbar --borders=10 --no-escape --always-print-result --splash --text-align=center
+)
 
 TEXTHEADER="Choose your Screen"
-TEXTTITLE="Screen selection"
-values=( $(yad --form --center --width=300 --text-align=center --height=100 --align=left --text="$TEXTHEADER" --center --title="$TEXTTITLE" --separator='!' \
-        --button=Skip:1 --button=Apply:0 \
+
+values=( $("${YAD[@]}" --text="$TEXTHEADER" \
+        --form ---align=left --separator='!' \
+        --button="gtk-cancel:1" --button="gtk-apply:0" \
         --field="Screen":CB "${screens[@]}"\
             ) )
 
@@ -16,5 +24,5 @@ if [ $? -eq 0 ]; then
 fi
 
 url=$(cat /home/kiosk/screen-name.txt)
-cat /home/kiosk/screen-details.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen-url.txt
+cat /home/kiosk/screens-available.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen-url.txt
 exit

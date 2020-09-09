@@ -30,14 +30,14 @@ fnCheckConnection() {
 	$WGET -q --tries=10 --timeout=5 http://www.google.com -O /tmp/index.google &> /dev/null
 
 	if [ ! -s /tmp/index.google ];then
-		notify-send 'Screen Setup' 'Cannot connect to the internet. Re-attempting...' -u low
+		notify-send 'easyScreen' 'Cannot connect to the internet. Re-attempting...' -u low
 		sleep 4s
 		fnCheckConnection `expr $1 + 1`
 	else
-		notify-send 'Screen setup' 'Connected to the internet. Opening the screen' -u low
+		notify-send 'easyScreen' 'Connected to the internet. Opening the screen.' -u low
 		sleep 4s
 
-		notify-send 'Screen Setup' 'Please wait - We are almost done' -u low
+		notify-send 'easyScreen' 'Please wait - we are almost done.' -u low
 
 		# @TODO Should be uncommented by conf.sh
 		# Uncoment this line if you need Linux app to start
@@ -45,25 +45,18 @@ fnCheckConnection() {
 		
 		# Getting default welcome screen
 
-#		git clone -b release https://c84c0799e0d67cb7feabc699b0b5812607e8935a@github.com/inleadmedia/es-license-service.git;
-#		cp -rf /home/kiosk/es-license-service/start_page/index.html /home/kiosk/index.html;
-#		sleep 1
 		# Restart TW
 		sudo teamviewer daemon restart
 		sleep 2s
-#		# Get TW ID
-#		TWID="$(grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' .config/teamviewer/client.conf)";
-#		reg="s/teamViewerId\" value=\"/&$TWID/";
-#		sed "$reg" index.html > start.html
 
 		# Run Chrome and open tab
 		pkill -f -- "chrome"
 		sleep 2s
 		/usr/bin/google-chrome --disable-pinch --overscroll-history-navigation=0 --no-first-run \
-		                       --disable-translate --no-default-browser-check --password-store=basic \
-				       --enable-native-gpu-memory-buffers --enable-features="CheckerImaging" \
-				       --incognito --window-size=1920,1080 --kiosk --window-position=0,0 \
-				       $CLIENTURL &
+					--disable-translate --no-default-browser-check --password-store=basic \
+					--enable-native-gpu-memory-buffers --enable-features="CheckerImaging" \
+					--incognito --window-size=1920,1080 --kiosk --window-position=0,0 \
+					$CLIENTURL &
 
 	fi
 }

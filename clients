@@ -2,11 +2,19 @@
 
 clients=$(curl -sS http://clients.easyscreen.io/api/clients| jq -r '[.data[].name] | @csv' |  sed 's/\,/!/g' > /home/kiosk/clients-available.txt)
 clients2=$(cat clients-available.txt)
+
 TEXTHEADER="Choose your Library"
-TEXTTITLE="Library selection"
-values=( $(yad --form --center --width=300 --text-align=center --height=100 --align=left --text="$TEXTHEADER" --center --title="$TEXTTITLE" --separator=' ' \
-        --button=Skip:1 --button=Apply:0 \
-        --field="Client":CB "$clients2"\
+
+YAD=(
+    yad \
+        --title=$TITLE --width=350 --height=150 --align=left --center \
+        --skip-taskbar --borders=10 --no-escape --always-print-result --splash --text-align=center
+)
+
+values=( $("${YAD[@]}" --text="$TEXTHEADER"  \
+        --form ---align=left --separator=' ' \
+        --button="gtk-cancel:1" --button="gtk-apply:0" \
+        --field="Client":CB "$clients2" \
             ) )
 
 if [ $? -eq 0 ]; then
