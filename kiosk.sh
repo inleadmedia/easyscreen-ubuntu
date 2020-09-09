@@ -24,20 +24,20 @@ CLIENTURL=$(cat /home/kiosk/screen-url.txt)
 sleep 2s
 
 fnCheckConnection() {
-	notify-send 'Screen Setup' 'Verifying the internet connection.' -t 3000
-	sleep 2s
+	notify-send 'Screen Setup' 'Verifying the internet connection.' -u low
+	sleep 4s
 	WGET="/usr/bin/wget"
 	$WGET -q --tries=10 --timeout=5 http://www.google.com -O /tmp/index.google &> /dev/null
 
 	if [ ! -s /tmp/index.google ];then
-		notify-send 'Screen Setup' 'Cannot connect to the internet. Re-attempting...' -t 3000
-		sleep 2s
+		notify-send 'Screen Setup' 'Cannot connect to the internet. Re-attempting...' -u low
+		sleep 4s
 		fnCheckConnection `expr $1 + 1`
 	else
-		notify-send 'Screen setup' 'Connected to the internet. Opening the screen' -t 3000
-		sleep 1s
+		notify-send 'Screen setup' 'Connected to the internet. Opening the screen' -u low
+		sleep 4s
 
-		notify-send 'Screen Setup' 'Please wait - We are almost done' -t 6000
+		notify-send 'Screen Setup' 'Please wait - We are almost done' -u low
 
 		# @TODO Should be uncommented by conf.sh
 		# Uncoment this line if you need Linux app to start
