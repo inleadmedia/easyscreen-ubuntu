@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #xrandr --output HDMI-1 --auto --primary
+# @TODO Somehow this has to be uncomment device is external.
 #xrandr --output eDP1 --off
 
 # Run this script in display 0 - the monitor
@@ -56,6 +57,7 @@ fnCheckConnection() {
 					--disable-translate --no-default-browser-check --password-store=basic \
 					--enable-native-gpu-memory-buffers --enable-features="CheckerImaging" \
 					--incognito --window-size=1920,1080 --kiosk --window-position=0,0 \
+          --check-for-update-interval=604800 \
 					$CLIENTURL &
 
 	fi
