@@ -36,7 +36,19 @@ sudo apt-get install curl -qq
 sudo apt-get install build-essential -qq
 sudo apt-get install libssl-dev -qq
 sudo apt-get install git -qq
+sudo apt-get install yad -qq
+sudo apt-get install jq -qq
 
+ # @TODO This should be done quietly without prompt.
+sudo debconf-set-selections <<< "postfix postfix/mailname string easyscreen-display"
+sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'" 
+sudo apt-get install mailutils -qq
+sudo sed -i 's/inet_protocols = all/inet_protocols = ipv4/g' /etc/postfix/main.cf
+sudo service postfix restart
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/reload -P /usr/bin/ && sudo chmod +x /usr/bin/reload
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/schedule -P /usr/bin/ && sudo chmod +x /usr/bin/schedule
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/clients -P /usr/bin/ && sudo chmod +x /usr/bin/clients
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/screens -P /usr/bin/ && sudo chmod +x /usr/bin/screens
 echo "$TIMESTAMP # See Hidden Startup Applications"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 
@@ -54,6 +66,13 @@ sudo apt install -y ./google-chrome-stable_current_amd64.deb -qq
 echo "$TIMESTAMP # Install TeamViewer"
 sudo wget -q https://download.teamviewer.com/download/linux/version_13x/teamviewer-host_amd64.deb
 sudo apt install -y ./teamviewer-host_amd64.deb -qq
+sudo teamviewer --passwd 4MenFromMars
+sudo teamviewer --daemon stop
+sudo tee -a /opt/teamviewer/config/global.conf >/dev/null <<'EOF'
+[int32] Always_Online = 1
+[int32] EulaAccepted = 1
+[int32] EulaAcceptedRevision = 6
+EOF
 
 echo "$TIMESTAMP # Disable screen tearing"
 sudo tee -a /usr/share/X11/xorg.conf.d/20-intel.conf >/dev/null <<'EOF'
@@ -284,12 +303,85 @@ sudo dconf update
 #sudo sh -c "echo \"CLUTTER_PAINT=disable-clipped-redraws:disable-culling\" >> /etc/environment"
 #sudo sh -c "echo \"CLUTTER_VBLANK=True\" >> /etc/environment"
 
+
+### OOBP
+
 echo "$TIMESTAMP # Install and upgrade software"
 sudo apt-get update -qq
 sudo apt-get upgrade -qq
 
-sudo oem-config-prepare --quiet
-#sudo poweroff
+echo "$TIMESTAMP # Create user"
+sudo su -c "groupadd kiosk"
+sudo su -c "useradd kiosk -s /bin/bash -d /home/kiosk/ -m -g kiosk"
+
+echo "$TIMESTAMP # Add users to sudo"
+sudo sh -c "echo \"kiosk ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+sudo sh -c "echo \"inlead ALL=(ALL) NOPASSWD: ALL\" >> /etc/sudoers"
+
+echo "$TIMESTAMP # Patch GNNOME shell extension"
+wget -qO- https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/252.diff |  sudo patch /usr/bin/gnome-shell-extension-tool
+
+echo "$TIMESTAMP # Define autologin"
+sudo tee /etc/gdm3/custom.conf >/dev/null <<'EOF'
+# GDM configuration storage
+
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=kiosk
+InitialSetupEnable=false
+
+TimedLoginEnable = true
+TimedLogin = username
+TimedLoginDelay = 10
+
+[security]
+
+[xdmcp]
+
+[chooser]
+
+[debug]
+#Enable=true
+EOF
+
+sudo tee /usr/share/lightdm/lightdm.conf.d/99-kiosk.conf >/dev/null <<'EOF'
+[Seat:*]
+user-session=kiosk
+EOF
+
+sudo -u kiosk tee ~kiosk/.dmrc >/dev/null <<'EOF'
+[Desktop]
+Session=kiosk
+EOF
+
+
+echo "$TIMESTAMP # Network policy"
+sudo tee /etc/polkit-1/localauthority/50-local.d/10-network-manager.pkla >/dev/null <<'EOF'
+[Let user kiosk modify system settings for network]
+Identity=unix-user:kiosk
+Action=org.freedesktop.NetworkManager.settings.modify.system
+ResultAny=no
+ResultInactive=no
+ResultActive=yes
+EOF
+
+echo "$TIMESTAMP # Create autostart"
+sudo -u kiosk mkdir -p /home/kiosk/.config
+sudo -u kiosk mkdir -p /home/kiosk/.config/autostart
+sudo -u kiosk touch /home/kiosk/.config/gnome-initial-setup-done 
+sudo -u kiosk tee /home/kiosk/.config/autostart/conf.desktop >/dev/null <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Configuration Manager
+Exec=/bin/bash /home/kiosk/conf.sh
+X-GNOME-Autostart-enabled=true
+EOF
+
+sleep 2
+sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf.sh
+sudo -u kiosk chmod +x /home/kiosk/conf.sh
+sleep 3
 
 trap : 0
 
@@ -299,4 +391,15 @@ echo >&2 '
 ************
 '
 
-reboot
+sleep 5
+clear
+
+echo "Are you sure you want to poweroff [y/n]"
+while true; do
+	read yn
+    case $yn in
+        [Yy]* ) sudo poweroff;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
