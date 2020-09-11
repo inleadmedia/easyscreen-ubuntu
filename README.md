@@ -32,6 +32,14 @@ Wait until the terminal says that it's safe to shutdown. Confirm that you would 
 
 In order to configure the computer, the Configuration Manager needs to run (TBD).
 
+![Install](/conf-manager/conf-install.jpg)
+![No connection](/conf-manager/conf-noconnection.jpg)
+![Screen](/conf-manager/conf-screen.jpg)
+![Shutdown](/conf-manager/conf-shutdown.jpg)
+![Shutdown - select](/conf-manager/conf-shutdown-select.jpg)
+![Start](/conf-manager/conf-start.jpg)
+![Configuration](/conf-manager/conf.jpg)
+
 
 # Known issues
 Some computers come with a predefined Onboard display output. In the process of installing OEM, you might need to press `Super`+`P` multiple times, until the display you are using becomes active.
