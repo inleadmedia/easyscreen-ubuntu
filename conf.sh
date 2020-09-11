@@ -37,19 +37,18 @@ checkConnection() {
 
         "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_NOCONN\n" \
                     --notebook --key=$NKEY --tab="Network" \
-                    --button="Check again!gtk-refresh":1 \
+                    --button="Check again!gtk-refresh:1" \
                     --buttons-layout=center
                        case $? in
                            1)
                            checkConnection `expr $1 + 1`
                        esac
-                    exit
     fi
 }
 
 finalizeInstall() {
-# Create autostart
-sudo -u kiosk tee /home/kiosk/.config/autostart/kiosk.desktop >/dev/null <<'EOF'
+    # Create autostart
+    sudo -u kiosk tee /home/kiosk/.config/autostart/kiosk.desktop >/dev/null <<'EOF'
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -75,7 +74,7 @@ EOF
     curl --silent --output /home/kiosk/ip-details.txt ifconfig.io
     cat /home/kiosk/ip-details.txt | sed 's/^/IP: /' >> /home/kiosk/mail-details.txt
     # Fetch TeamViewer ID
-    cat .config/teamviewer/client.conf |grep ClientIDOfTSUser | sed 's/^/TW: /' >> /home/kiosk/mail-details.txt
+    cat /home/kiosk/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' |sed 's/^/TW: /' >> /home/kiosk/mail-details.txt
 
     mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/mail-details.txt
 
@@ -96,7 +95,7 @@ if [[ ! -e $SUCCESSFILE ]]; then
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_INSTALL\n" \
                 --text-info --tail --back=black --fore=white --fontname="Monospace 9" \
                 --align=left \
-                --button="gtk-ok":0 --button="Exit" \
+                --button="gtk-ok:0" --button="Exit" \
                 --buttons-layout=end
                 
                bar=$?
@@ -110,7 +109,7 @@ else
     
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_WELCOME\n" \
                 --form --align=left \
-                --button="gtk-close:1" --button="gtk-ok":0 \
+                --button="gtk-close:1" --button="gtk-ok:0" \
                 --buttons-layout=end
 
                foo=$?
@@ -129,7 +128,7 @@ else
     # Client and Screen setup tab
     yad \
         --plug=$CKEY --tabnum=2 --form --separator='\n' --quoted-output \
-        --field="Library:":FBTN "clients" \
+        --field="Library":FBTN "clients" \
         --field="Screen":FBTN "screens" &
 
     # Schedule tab
@@ -149,7 +148,7 @@ else
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_CONF\n" \
                 --notebook --key=$CKEY --tab="Configuration" --tab="Screen" --tab="Schedule" --tab="Extra" \
                 --buttons-layout=center \
-                --button="gtk-cancel":0 --button="gtk-apply:1"
+                --button="gtk-cancel:0" --button="gtk-apply:1"
                    case $? in
                       1)
                       finalizeInstall
