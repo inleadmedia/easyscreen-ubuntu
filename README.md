@@ -20,7 +20,7 @@ Wait for the machine to reboot and proceed with the installation. Go through the
 
 Do the installation in "next-next-next" style until the installation is ready and the system wants to reboot. When the machine computer has rebooted, connect to a WiFi and run the following command:
 ```
-bash <(wget -O- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/oem-install.sh)
+bash <(wget -O- https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/install.sh)
 ```
 
 Wait until the terminal ask for the password of the user and input it.

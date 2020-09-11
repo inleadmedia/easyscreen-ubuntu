@@ -38,7 +38,6 @@ sudo apt-get install libssl-dev -qq
 sudo apt-get install git -qq
 sudo apt-get install yad -qq
 sudo apt-get install jq -qq
-sudo apt-get install oem-config -qq
 
  # @TODO This should be done quietly without prompt.
 sudo debconf-set-selections <<< "postfix postfix/mailname string easyscreen-display"
@@ -46,10 +45,10 @@ sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Intern
 sudo apt-get install mailutils -qq
 sudo sed -i 's/inet_protocols = all/inet_protocols = ipv4/g' /etc/postfix/main.cf
 sudo service postfix restart
-sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/reload -P /usr/bin/ && sudo chmod +x /usr/bin/reload
-sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/schedule -P /usr/bin/ && sudo chmod +x /usr/bin/schedule
-sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/clients -P /usr/bin/ && sudo chmod +x /usr/bin/clients
-sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/screens -P /usr/bin/ && sudo chmod +x /usr/bin/screens
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/reload -P /usr/bin/ && sudo chmod +x /usr/bin/reload
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/schedule -P /usr/bin/ && sudo chmod +x /usr/bin/schedule
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/clients -P /usr/bin/ && sudo chmod +x /usr/bin/clients
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/screens -P /usr/bin/ && sudo chmod +x /usr/bin/screens
 echo "$TIMESTAMP # See Hidden Startup Applications"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 
@@ -380,7 +379,7 @@ X-GNOME-Autostart-enabled=true
 EOF
 
 sleep 2
-sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/conf.sh
+sudo -u kiosk wget -q --output-document=/home/kiosk/conf.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf.sh
 sudo -u kiosk chmod +x /home/kiosk/conf.sh
 sleep 3
 

@@ -19,7 +19,7 @@ values=( $("${YAD[@]}" --text="$TEXTHEADER" \
 if [ $? -eq 0 ]; then
     echo "${values[0]}" > /home/kiosk/schedule-shutdown.txt
     echo "${values[1]}" > /home/kiosk/schedule-startup.txt
-#    sudo -u kiosk wget -q --output-document=/home/kiosk/conf-schedule.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/conf-schedule.sh
+#    sudo -u kiosk wget -q --output-document=/home/kiosk/conf-schedule.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf-schedule.sh
 #    sudo bash /home/kiosk/conf-schedule.sh > /home/kiosk/schedule-log.txt
 fi
 

@@ -57,7 +57,7 @@ Exec=/home/kiosk/kiosk.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
-    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/kiosk.sh
+    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
     sudo chmod +x /home/kiosk/kiosk.sh
 
     sudo -u kiosk rm -rf /home/kiosk/.config/autostart/conf.desktop
@@ -78,7 +78,7 @@ EOF
 
     mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/mail-details.txt
 
-    sleep 1
+    sleep 3
     reboot
 }
 
@@ -87,7 +87,7 @@ if [[ ! -e $SUCCESSFILE ]]; then
     checkConnection "1"
     sleep 1
 
-    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk-install.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/new-installation/kiosk-install.sh
+    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk-install.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh
     sudo chmod +x /home/kiosk/kiosk-install.sh
     sleep 1
 
@@ -95,7 +95,7 @@ if [[ ! -e $SUCCESSFILE ]]; then
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_INSTALL\n" \
                 --text-info --tail --back=black --fore=white --fontname="Monospace 9" \
                 --align=left \
-                --button="gtk-ok:0" --button="Exit" \
+                --button="Exit" --button="gtk-ok:0" \
                 --buttons-layout=end
                 
                bar=$?
