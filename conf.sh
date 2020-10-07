@@ -140,9 +140,7 @@ else
     # Hardware tab
     yad \
         --plug=$CKEY --tabnum=4 --form --separator='\n' --quoted-output \
-        --date-format="%H %M" \
-        --field="Is this computer a Friendly Frank?":CHK &
-        # @TODO This should call conf-hw.sh if checked
+        --field="Click to setup hardware":FBTN "hardware" &
 
     # Main dialog
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_CONF\n" \

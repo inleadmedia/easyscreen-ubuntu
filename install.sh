@@ -49,6 +49,8 @@ sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/mas
 sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/schedule -P /usr/bin/ && sudo chmod +x /usr/bin/schedule
 sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/clients -P /usr/bin/ && sudo chmod +x /usr/bin/clients
 sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/screens -P /usr/bin/ && sudo chmod +x /usr/bin/screens
+sudo wget -q https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/hardware -P /usr/bin/ && sudo chmod +x /usr/bin/hardware
+
 echo "$TIMESTAMP # See Hidden Startup Applications"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 
