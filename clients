@@ -1,5 +1,7 @@
 #!/bin/bash
 
+GTK_THEME=Adwaita
+
 clients=$(curl -sS http://clients.easyscreen.io/api/clients| jq -r '[.data[].name] | @csv' |  sed 's/\,/!/g' > /home/kiosk/clients-available.txt)
 clients2=$(cat clients-available.txt)
 

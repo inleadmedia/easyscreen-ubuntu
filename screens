@@ -1,5 +1,7 @@
 #!/bin/bash
 
+GTK_THEME=Adwaita
+
 clients=$(cat /home/kiosk/client-name.txt)
 
 screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name==$clients) | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen-names.txt && echo "$(<screen-names.txt)")

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+GTK_THEME=Adwaita
+
 TEXTHEADER="Schedule a time for Auto - Shutdown/Startup of the screen"
 
 YAD=(

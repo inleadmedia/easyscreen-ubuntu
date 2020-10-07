@@ -17,28 +17,20 @@ set -e
 
 TIMESTAMP=`date "+%Y-%m-%d %H:%M:%S"`
 
-auth_token="$1";
-destination="$2";
-lms_domain="$3";
-branch=$4;
-TMID="$5";
+echo "$TIMESTAMP # Fix auth token"
+sudo mkdir -p /home/kiosk/.ssh
+sudo wget -q --output-document=/home/kiosk/.ssh/authtoken http://storage.easyting.dk/ubuntu/authtoken
 
-echo "$TIMESTAMP # Fix SSH keys"
-sudo -u kiosk mkdir -p /home/kiosk/.ssh
-sudo -u kiosk wget -q --output-document=/home/kiosk/.ssh/id_rsa.pub http://storage.easyting.dk/ubuntu/sshkey1.txt
-sudo -u kiosk wget -q --output-document=/home/kiosk/.ssh/id_rsa http://storage.easyting.dk/ubuntu/sshkey2.txt
-chmod 0600 /home/kiosk/.ssh/id_rsa
-        
-sudo -u kiosk tee /home/kiosk/.ssh/config >/dev/null <<'EOF'
-Host *
-    UpdateHostKeys yes
-    StrictHostKeyChecking accept-new
-EOF
+auth_token=$(cat /home/kiosk/.ssh/authtoken)
+destination="/home/kiosk/es-linux-app";
+lms_domain="https://lms.inlead.ws";
+branch=master;
+TWID=$(cat /home/kiosk/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' |sed 's/^/TW: /');
 
 echo "$TIMESTAMP # Install FF linux app"
-sudo -u kiosk git clone -q -b $branch "git@github.com:inleadmedia/es-linux-apps.git" /home/kiosk/es-linux-apps
-sudo -u kiosk bash /home/kiosk/es-linux-apps/installation/install-nvm.sh
-sudo -u kiosk bash -c "bash /home/kiosk/es-linux-apps/installation/install-app.sh --auth-token=$auth_token --destination=$destination --lms-domain=$lms_domain --app-branch=$branch --rfid-scanner=FEIG --printer=POS --tmid=$TMID --barcode-scanner=evtest --feig-scanner-app-branch=$branch --printer-app-branch=$branch --barcode-app-branch=$branch"
+sudo git clone -q -b $branch "https://$auth_token@github.com/inleadmedia/es-linux-apps.git" /home/kiosk/es-linux-apps
+sudo bash /home/kiosk/es-linux-apps/installation/install-nvm.sh
+sudo bash -c "bash /home/kiosk/es-linux-apps/installation/install-app.sh --auth-token=$auth_token --destination=$destination --lms-domain=$lms_domain --app-branch=$branch --tmid=$TWID --feig-scanner-app-branch=$branch --printer-app-branch=$branch --barcode-app-branch=$branch $CONCATENATE"
 
 trap : 0
 
