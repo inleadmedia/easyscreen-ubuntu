@@ -365,6 +365,10 @@ ResultInactive=no
 ResultActive=yes
 EOF
 
+echo "$TIMESTAMP # Disable upgrades alltogether"
+sudo sed -i 's/Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades
+sudo apt-get remove ubuntu-release-upgrader-core -qq
+
 echo "$TIMESTAMP # Create autostart"
 sudo -u kiosk mkdir -p /home/kiosk/.config
 sudo -u kiosk mkdir -p /home/kiosk/.config/autostart
