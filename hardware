@@ -11,73 +11,82 @@ YAD=(
 
 TEXTHEADER="Define the hardware connected to the device:\n\n"
 
-values=( $("${YAD[@]}" --text="$TEXTHEADER" \
-        --form --align=left --separator=' ' \
-        --button="gtk-cancel:1" --button="gtk-apply:0" \
-        --field="Scanner":CB \
-            'None!FEIG!Metratec' \
-        --field="Sorting bin":CB \
-            'None!FEIG!Metratec' \
-        --field="Barcode":CB \
-            'None!Keyboard emulation!Virtual serial port usage' \
-        --field="Printer":CB \
-            'None!POS!Native!COM' \
-        --field="Printer status checking":CHK \
-        --field="Safety mode":CHK ) )
-
-if [ $? -eq 0 ]; then
-  CONCATENATE=" "
-
-  # RFID scanner manufacturer
-  if [[ ${values[0]} = "FEIG" ]]; then
-    CONCATENATE+=" --rfid-scanner=FEIG"
-  elif [[ ${values[0]} = "Metratec" ]]; then
-    CONCATENATE+=" --rfid-scanner=metratec"
-  fi
-
-  # Sorting bin scanner manufacturer
-  if [[ ${values[1]} = "FEIG" ]]; then
-    CONCATENATE+=" --sorting-bin=FEIG"
-  elif [[ ${values[1]} = "Metratec" ]]; then
-    CONCATENATE+=" --sorting-bin=metratec"
-  fi
-
-  # Barcode scanner type
-  if [[ ${values[2]} = "Keyboard emulation" ]]; then
-    CONCATENATE+=" --barcode-scanner=evtest"
-  elif [[ ${values[2]} = "Virtual serial port usage" ]]; then
-    CONCATENATE+=" --barcode-scanner=serialport"
-  fi
-
-  # Printer
-  if [[ ${values[3]} = "POS" ]]; then
-    CONCATENATE+=" --printer=POS"
-  elif [[ ${values[3]} = "Native" ]]; then
-    CONCATENATE+=" --printer=native"
-  elif [[ ${values[3]} = "COM" ]]; then
-    CONCATENATE+=" --printer=COM"
-  fi
-
-  # Printer status checking
-  if [[ ${values[4]} -eq 1 ]]; then
-    CONCATENATE+=" --with-printer-status"
-  fi
-
-  # Safety mode
-  if [[ ${values[5]} -eq 1 ]]; then
-    CONCATENATE+=" --safety-mode"
-  fi
-fi
-
-TEXT_HW="Installing hardware, please wait.."
 
 if [[ ! -e $HWSUCCESSFILE ]]; then
-  sudo wget -q --output-document=/home/kiosk/conf-hw.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf-hw.sh
+  sudo -u kiosk wget -q --output-document=/home/kiosk/conf-hw.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf-hw.sh
   sudo chmod +x /home/kiosk/conf-hw.sh
   sleep 1
 
-  /home/kiosk/conf-hw.sh | tee -a /home/kiosk/hardware-install-log.txt | \
-  "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_HW\n" \
-              --progress --auto-close --pulsate \
-              --no-buttons
+  TEXT_HW="Installing hardware, please wait.."
+
+  proceedWithInstall() {
+    (
+        bash /home/kiosk/conf-hw.sh "$CONCATENATE" > /home/kiosk/hardware-install-log.txt
+        echo "# Installing hardware, please wait..\n"
+        sleep 1
+    ) |
+    "${YAD[@]}" --text="$TEXT_HW\n" \
+                --progress --auto-close --pulsate \
+                --no-buttons
+  }
+
+  values=( $("${YAD[@]}" --text="$TEXTHEADER" \
+          --form --align=left --separator=' ' \
+          --button="gtk-cancel:1" --button="gtk-apply:0" \
+          --field="Scanner":CB \
+              'None!FEIG!Metratec' \
+          --field="Sorting bin":CB \
+              'None!FEIG!Metratec' \
+          --field="Barcode":CB \
+              'None!Keyboard-emulation!Virtual-serial-port-usage' \
+          --field="Printer":CB \
+              'None!POS!Native!COM' \
+          --field="Printer status checking":CHK \
+          --field="Safety mode":CHK ) )
+
+  if [ $? -eq 0 ]; then
+    CONCATENATE=" "
+
+    # RFID scanner manufacturer
+    if [[ ${values[0]} = "FEIG" ]]; then
+      CONCATENATE+=" --rfid-scanner=FEIG"
+    elif [[ ${values[0]} = "Metratec" ]]; then
+      CONCATENATE+=" --rfid-scanner=metratec"
+    fi
+
+    # Sorting bin scanner manufacturer
+    if [[ ${values[1]} = "FEIG" ]]; then
+      CONCATENATE+=" --sorting-bin=FEIG"
+    elif [[ ${values[1]} = "Metratec" ]]; then
+      CONCATENATE+=" --sorting-bin=metratec"
+    fi
+
+    # Barcode scanner type
+    if [[ ${values[2]} = "Keyboard-emulation" ]]; then
+      CONCATENATE+=" --barcode-scanner=evtest"
+    elif [[ ${values[2]} = "Virtual-serial-port-usage" ]]; then
+      CONCATENATE+=" --barcode-scanner=serialport"
+    fi
+
+    # Printer
+    if [[ ${values[3]} = "POS" ]]; then
+      CONCATENATE+=" --printer=POS"
+    elif [[ ${values[3]} = "Native" ]]; then
+      CONCATENATE+=" --printer=native"
+    elif [[ ${values[3]} = "COM" ]]; then
+      CONCATENATE+=" --printer=COM"
+    fi
+
+    # Printer status checking
+    if [[ ${values[4]} -eq 1 ]]; then
+      CONCATENATE+=" --with-printer-status"
+    fi
+
+    # Safety mode
+    if [[ ${values[5]} -eq 1 ]]; then
+      CONCATENATE+=" --safety-mode"
+    fi
+
+    proceedWithInstall
+  fi
 fi
