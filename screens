@@ -23,8 +23,8 @@ values=( $("${YAD[@]}" --text="$TEXTHEADER" \
 
 if [ $? -eq 0 ]; then
     sudo -u kiosk echo "${values[@]}" | sed 's/.$//' > /home/kiosk/screen-name.txt
-fi
 
-url=$(cat /home/kiosk/screen-name.txt)
-cat /home/kiosk/screens-available.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen-url.txt
-exit
+    url=$(cat /home/kiosk/screen-name.txt)
+    cat /home/kiosk/screens-available.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen-url.txt
+    exit
+fi

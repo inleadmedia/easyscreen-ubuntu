@@ -78,6 +78,8 @@ EOF
 
     mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/mail-details.txt
 
+    touch $SUCCESSFILE
+
     sleep 3
     reboot
 }
