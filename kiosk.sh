@@ -1,5 +1,10 @@
 #!/bin/bash
 
+## Define user
+USER=kiosk
+HOMEDIR=/home/${USER}
+
+
 #xrandr --output HDMI-1 --auto --primary
 # @TODO Somehow this has to be uncomment device is external.
 #xrandr --output eDP1 --off
@@ -16,10 +21,10 @@ gnome-shell-extension-tool -e cariboublocker@git.keringar.xyz
 unclutter &
 
 # If Chrome crashes (usually due to rebooting), clear the crash flag so we don't have the annoying warning bar
-sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/google-chrome/Default/Preferences
-sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/google-chrome/Default/Preferences
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ${HOMEDIR}/.config/google-chrome/Default/Preferences
+sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' ${HOMEDIR}/.config/google-chrome/Default/Preferences
 
-CLIENTURL=$(cat /home/kiosk/screen-url.txt)
+CLIENTURL=$(cat ${HOMEDIR}/screen-url.txt)
 
 # Check connection and run Chrome
 sleep 2s
@@ -42,7 +47,7 @@ fnCheckConnection() {
 
 		# @TODO Should be uncommented by conf.sh
 		# Uncoment this line if you need Linux app to start
-		# sudo node /home/kiosk/es-linux-app/./index.js &
+		# sudo node ${HOMEDIR}/es-linux-app/./index.js &
 		
 		# Getting default welcome screen
 

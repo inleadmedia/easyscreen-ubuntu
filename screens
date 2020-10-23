@@ -1,11 +1,16 @@
 #!/bin/bash
 
+## Define user
+USER=kiosk
+HOMEDIR=/home/${USER}
+
+
 GTK_THEME=Adwaita
 
-clients=$(cat /home/kiosk/client-name.txt)
+clients=$(cat ${HOMEDIR}/client-name.txt)
 
 screens=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name==$clients) | .screens | keys |@tsv' | tr -d '",' | sed 's/\\t/!/g' > screen-names.txt && echo "$(<screen-names.txt)")
-screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name ==$clients) | .screens' | tr -d '",' > /home/kiosk/screens-available.txt)
+screens_tmp=$(curl -sS http://clients.easyscreen.io/api/clients | jq --arg clients "$clients" '.data[] | select (.name ==$clients) | .screens' | tr -d '",' > ${HOMEDIR}/screens-available.txt)
 
 YAD=(
     yad \
@@ -22,9 +27,9 @@ values=( $("${YAD[@]}" --text="$TEXTHEADER" \
             ) )
 
 if [ $? -eq 0 ]; then
-    sudo -u kiosk echo "${values[@]}" | sed 's/.$//' > /home/kiosk/screen-name.txt
+    sudo -u ${USER} echo "${values[@]}" | sed 's/.$//' > ${HOMEDIR}/screen-name.txt
 
-    url=$(cat /home/kiosk/screen-name.txt)
-    cat /home/kiosk/screens-available.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > /home/kiosk/screen-url.txt
+    url=$(cat ${HOMEDIR}/screen-name.txt)
+    cat ${HOMEDIR}/screens-available.txt | grep "${url}" | sed 's/^[^=:]*[=:]//' | awk '{print $1$2,$3,$4,$5,$6,$7}' > ${HOMEDIR}/screen-url.txt
     exit
 fi

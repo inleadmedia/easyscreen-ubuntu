@@ -1,7 +1,13 @@
 #!/bin/bash
 
+## Define user
+USER=kiosk
+HOMEDIR=/home/${USER}
+HOMEREPO=https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/bibbox
+
+
 GTK_THEME=Adwaita
-HWSUCCESSFILE=/home/kiosk/hardware-setup-done
+HWSUCCESSFILE=${HOMEDIR}/hardware-setup-done
 
 YAD=(
     yad \
@@ -13,15 +19,15 @@ TEXTHEADER="Define the hardware connected to the device:\n\n"
 
 
 if [[ ! -e $HWSUCCESSFILE ]]; then
-  sudo -u kiosk wget -q --output-document=/home/kiosk/conf-hw.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/conf-hw.sh
-  sudo chmod +x /home/kiosk/conf-hw.sh
+  sudo -u ${USER} wget -q --output-document=${HOMEDIR}/conf-hw.sh ${HOMEREPO}/conf-hw.sh
+  sudo chmod +x ${HOMEDIR}/conf-hw.sh
   sleep 1
 
   TEXT_HW="Installing hardware, please wait.."
 
   proceedWithInstall() {
     (
-        bash /home/kiosk/conf-hw.sh "$CONCATENATE" > /home/kiosk/hardware-install-log.txt
+        bash ${HOMEDIR}/conf-hw.sh "$CONCATENATE" > ${HOMEDIR}/hardware-install-log.txt
         echo "# Installing hardware, please wait..\n"
         sleep 1
     ) |

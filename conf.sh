@@ -1,7 +1,13 @@
 #!/bin/bash
 
+## Define user
+USER=kiosk
+HOMEDIR=/home/${USER}
+HOMEREPO=https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/bibbox
+
+
 GTK_THEME=Adwaita
-SUCCESSFILE=/home/kiosk/easyscreen-initial-setup-done
+SUCCESSFILE=${HOMEDIR}/easyscreen-initial-setup-done
 
 YAD=(
     yad \
@@ -48,7 +54,7 @@ checkConnection() {
 
 finalizeInstall() {
     # Create autostart
-    sudo -u kiosk tee /home/kiosk/.config/autostart/kiosk.desktop >/dev/null <<'EOF'
+    sudo -u ${USER} tee ${HOMEDIR}/.config/autostart/kiosk.desktop >/dev/null <<'EOF'
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -57,30 +63,30 @@ Exec=/home/kiosk/kiosk.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
-    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk.sh
-    sudo chmod +x /home/kiosk/kiosk.sh
+    sudo -u ${USER} wget -q --output-document=${HOMEDIR}/kiosk.sh ${HOMEREPO}/kiosk.sh
+    sudo chmod +x ${HOMEDIR}/kiosk.sh
 
-    sudo -u kiosk rm -rf /home/kiosk/.config/autostart/conf.desktop
+    sudo -u ${USER} rm -rf ${HOMEDIR}/.config/autostart/conf.desktop
 
     # Send information about this device to Inlead
-    touch /home/kiosk/mail-details.txt
+    touch ${HOMEDIR}/mail-details.txt
     # Fetch client name
-    cat /home/kiosk/client-name.txt | sed 's/^/Client: /' >> /home/kiosk/mail-details.txt
+    cat ${HOMEDIR}/client-name.txt | sed 's/^/Client: /' >> ${HOMEDIR}/mail-details.txt
     # Fetch screen name
-    cat /home/kiosk/screen-name.txt | sed 's/^/Screen: /' >> /home/kiosk/mail-details.txt
+    cat ${HOMEDIR}/screen-name.txt | sed 's/^/Screen: /' >> ${HOMEDIR}/mail-details.txt
     # Fetch screen URL
-    cat /home/kiosk/screen-url.txt | sed 's/^/URL: /' >> /home/kiosk/mail-details.txt
+    cat ${HOMEDIR}/screen-url.txt | sed 's/^/URL: /' >> ${HOMEDIR}/mail-details.txt
     # Fetch Client IP
-    curl --silent --output /home/kiosk/ip-details.txt ifconfig.io
-    cat /home/kiosk/ip-details.txt | sed 's/^/IP: /' >> /home/kiosk/mail-details.txt
+    curl --silent --output ${HOMEDIR}/ip-details.txt ifconfig.io
+    cat ${HOMEDIR}/ip-details.txt | sed 's/^/IP: /' >> ${HOMEDIR}/mail-details.txt
     # Fetch TeamViewer ID
-    cat /home/kiosk/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' |sed 's/^/TW: /' >> /home/kiosk/mail-details.txt
+    cat ${HOMEDIR}/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' |sed 's/^/TW: /' >> ${HOMEDIR}/mail-details.txt
 
-    mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < /home/kiosk/mail-details.txt
+    mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < ${HOMEDIR}/mail-details.txt
 
     touch $SUCCESSFILE
 
-    sleep 3
+    sleep 2
     reboot
 }
 
@@ -89,11 +95,11 @@ if [[ ! -e $SUCCESSFILE ]]; then
     checkConnection "1"
     sleep 1
 
-    sudo -u kiosk wget -q --output-document=/home/kiosk/kiosk-install.sh https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/master/kiosk-install.sh
-    sudo chmod +x /home/kiosk/kiosk-install.sh
+    sudo -u ${USER} wget -q --output-document=${HOMEDIR}/kiosk-install.sh ${HOMEREPO}/kiosk-install.sh
+    sudo chmod +x ${HOMEDIR}/kiosk-install.sh
     sleep 1
 
-    /home/kiosk/kiosk-install.sh | tee -a /home/kiosk/install-log.txt | \
+    ${HOMEDIR}/kiosk-install.sh | tee -a ${HOMEDIR}/install-log.txt | \
     "${YAD[@]}" --text="$TEXTHEADER\n$TEXT_INSTALL\n" \
                 --text-info --tail --back=black --fore=white --fontname="Monospace 9" \
                 --align=left \

@@ -1,8 +1,13 @@
 #!/bin/bash
 
+## Define user
+USER=kiosk
+HOMEDIR=/home/${USER}
+
+
 GTK_THEME=Adwaita
 
-clients=$(curl -sS http://clients.easyscreen.io/api/clients| jq -r '[.data[].name] | @csv' |  sed 's/\,/!/g' > /home/kiosk/clients-available.txt)
+clients=$(curl -sS http://clients.easyscreen.io/api/clients| jq -r '[.data[].name] | @csv' |  sed 's/\,/!/g' > ${HOMEDIR}/clients-available.txt)
 clients2=$(cat clients-available.txt)
 
 TEXTHEADER="Choose your Library"
@@ -20,5 +25,5 @@ values=( $("${YAD[@]}" --text="$TEXTHEADER"  \
             ) )
 
 if [ $? -eq 0 ]; then
-    sudo -u kiosk echo "${values[*]}" | sed 's/^.\(.*\).$/\1/' > /home/kiosk/client-name.txt
+    sudo -u ${USER} echo "${values[*]}" | sed 's/^.\(.*\).$/\1/' > ${HOMEDIR}/client-name.txt
 fi

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+## Define user
+USER=kiosk
+HOMEDIR=/home/${USER}
+
+
 GTK_THEME=Adwaita
 
 TEXTHEADER="Schedule a time for Auto - Shutdown/Startup of the screen"
@@ -19,11 +24,11 @@ values=( $("${YAD[@]}" --text="$TEXTHEADER" \
             '05:00:00!05:30:00!06:00:00!06:30:00!07:00:00!07:30:00!08:00:00!08:30:00') )
 
 if [ $? -eq 0 ]; then
-    echo "${values[0]}" > /home/kiosk/schedule-shutdown.txt
-    echo "${values[1]}" > /home/kiosk/schedule-startup.txt
+    echo "${values[0]}" > ${HOMEDIR}/schedule-shutdown.txt
+    echo "${values[1]}" > ${HOMEDIR}/schedule-startup.txt
 
-    shutdown=$(cat /home/kiosk/schedule-shutdown.txt)
-    startup=$(cat /home/kiosk/schedule-startup.txt)
+    shutdown=$(cat ${HOMEDIR}/schedule-shutdown.txt)
+    startup=$(cat ${HOMEDIR}/schedule-startup.txt)
 
     echo "$TIMESTAMP # Scheduled Suspend and Resume"
     sudo touch /etc/systemd/system/auto-suspend.timer
