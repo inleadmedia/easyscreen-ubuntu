@@ -20,6 +20,9 @@ TIMESTAMP=`date "+%Y-%m-%d %H:%M:%S"`
 
 ### OEM
 
+# $TIMESTAMP # Use mirror protocol (fastest apt)"
+sudo sed -i -e 's/http:\/\/us.archive/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
+
 echo "$TIMESTAMP # Install and upgrade software"
 sudo apt-get update -qq
 sudo apt-get upgrade -qq
