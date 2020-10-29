@@ -2,7 +2,7 @@
 
 #xrandr --output HDMI-1 --auto --primary
 # @TODO Somehow this has to be uncomment device is external.
-xrandr --output eDP1 --off
+#xrandr --output eDP1 --off
 
 # Run this script in display 0 - the monitor
 #export DISPLAY=:0
