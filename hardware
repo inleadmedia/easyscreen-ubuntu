@@ -15,6 +15,12 @@ YAD=(
         --skip-taskbar --borders=10 --no-escape --always-print-result --splash --text-align=center
 )
 
+YAD2=(
+    yad \
+        --title=$TITLE --width=500 --height=500 --align=left --center \
+        --skip-taskbar --borders=10 --no-escape --always-print-result --splash --text-align=center
+)
+
 TEXTHEADER="Define the hardware connected to the device:\n\n"
 
 
@@ -26,14 +32,12 @@ if [[ ! -e $HWSUCCESSFILE ]]; then
   TEXT_HW="Installing hardware, please wait.."
 
   proceedWithInstall() {
-    (
-        bash ${HOMEDIR}/conf-hw.sh "$CONCATENATE" > ${HOMEDIR}/hardware-install-log.txt
-        echo "# Installing hardware, please wait..\n"
-        sleep 1
-    ) |
-    "${YAD[@]}" --text="$TEXT_HW\n" \
-                --progress --auto-close --pulsate \
-                --no-buttons
+    ${HOMEDIR}/conf-hw.sh "$CONCATENATE" | tee -a ${HOMEDIR}/hardware-install-log.txt | \
+    "${YAD2[@]}" --text="$TEXT_HW\n" \
+                --text-info --tail --back=black --fore=white --fontname="Monospace 9" \
+                --align=left \
+                --button="gtk-ok:0" \
+                --buttons-layout=end
   }
 
   values=( $("${YAD[@]}" --text="$TEXTHEADER" \
