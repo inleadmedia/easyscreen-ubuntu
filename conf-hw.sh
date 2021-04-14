@@ -49,10 +49,12 @@ echo "${GREEN}${TIMESTAMP} ${UNDERLINE}# Install FF linux app${RESET}"
 sudo -u ${USER} rm -rf ${HOMEDIR}/es-linux-apps ${HOMEDIR}/es-linux-app ${HOMEDIR}/.nvm ${HOMEDIR}/.npm
 sudo -u ${USER} git clone -q -b $BRANCH "https://$AUTH_TOKEN@github.com/inleadmedia/es-linux-apps.git" ${HOMEDIR}/es-linux-apps
 sudo -u ${USER} bash ${HOMEDIR}/es-linux-apps/installation/install-nvm.sh
-sudo -u ${USER} bash -c "bash ${HOMEDIR}/es-linux-apps/installation/install-app.sh --auth-token=$AUTH_TOKEN --destination=$DESTINATION --lms-domain=$LMS_DOMAIN --app-branch=$BRANCH --tmid=$TWID --feig-scanner-app-branch=$BRANCH --printer-app-branch=$BRANCH --barcode-app-branch=$BRANCH $1"
+sudo -u ${USER} bash -c "bash ${HOMEDIR}/es-linux-apps/installation/install-app.sh --auth-token=$AUTH_TOKEN --destination=$DESTINATION --lms-domain=$LMS_DOMAIN --app-branch=$BRANCH --tmid=$TWID --feig-scanner-app-branch=$BRANCH --printer-app-branch=$BRANCH --barcode-app-branch=$BRANCH $1; exit"
 
 # Add file in order to check for previous installation.
 touch $HWSUCCESSFILE
+
+echo "${GREEN}${TIMESTAMP} ${UNDERLINE}# ALL DONE - please click OK${RESET}"
 
 trap : 0
 
