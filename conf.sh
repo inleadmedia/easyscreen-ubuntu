@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## Disable internal display for external FF display to work
+xrandr --output eDP1 --off
+
 ## Define user
 USER=kiosk
 HOMEDIR=/home/${USER}
