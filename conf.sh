@@ -11,6 +11,7 @@ HOMEREPO=https://raw.githubusercontent.com/inleadmedia/easyscreen-ubuntu/bibbox
 
 GTK_THEME=Adwaita
 SUCCESSFILE=${HOMEDIR}/easyscreen-initial-setup-done
+HWSUCCESSFILE=${HOMEDIR}/hardware-setup-done
 
 YAD=(
     yad \
