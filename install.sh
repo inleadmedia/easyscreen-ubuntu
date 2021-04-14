@@ -55,6 +55,12 @@ sudo wget -q ${HOMEREPO}/clients -P /usr/bin/ && sudo chmod +x /usr/bin/clients
 sudo wget -q ${HOMEREPO}/screens -P /usr/bin/ && sudo chmod +x /usr/bin/screens
 sudo wget -q ${HOMEREPO}/hardware -P /usr/bin/ && sudo chmod +x /usr/bin/hardware
 
+# Fix for FF
+sudo wget -q http://ftp.br.debian.org/debian/pool/main/g/glibc/libc6_2.28-10_amd64.deb
+sudo wget -q http://ftp.br.debian.org/debian/pool/main/g/glibc/libc6-dev_2.28-10_amd64.deb
+sudo dpkg -x ./libc6_2.28-10_amd64.deb /
+sudo dpkg -x ./libc6-dev_2.28-10_amd64.deb /
+
 echo "${GREEN}${TIMESTAMP} ${UNDERLINE}# See Hidden Startup Applications${RESET}"
 sudo sed -i 's/NoDisplay=true/NoDisplay=false/g' /etc/xdg/autostart/*.desktop
 
