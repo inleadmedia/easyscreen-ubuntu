@@ -80,7 +80,7 @@ EOF
     curl --silent --output ${HOMEDIR}/ip-details.txt ifconfig.io
     cat ${HOMEDIR}/ip-details.txt | sed 's/^/IP: /' >> ${HOMEDIR}/mail-details.txt
     # Fetch TeamViewer ID
-    cat ${HOMEDIR}/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+' |sed 's/^/TW: /' >> ${HOMEDIR}/mail-details.txt
+    sudo cat /etc/teamviewer/global.conf |grep -oP '(?<=ClientID = )[0-9]+' |sed 's/^/TW: /' >> ${HOMEDIR}/mail-details.txt
 
     mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < ${HOMEDIR}/mail-details.txt
 

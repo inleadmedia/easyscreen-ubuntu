@@ -43,7 +43,7 @@ AUTH_TOKEN=$(cat ${HOMEDIR}/.ssh/authtoken)
 DESTINATION="${HOMEDIR}/es-linux-app";
 LMS_DOMAIN="https://v3.lms.inlead.dk";
 BRANCH=master;
-TWID=$(cat ${HOMEDIR}/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+');
+TWID=$(sudo cat /etc/teamviewer/global.conf |grep -oP '(?<=ClientID = )[0-9]+');
 
 echo "${GREEN}${TIMESTAMP} ${UNDERLINE}# Install FF linux app${RESET}"
 sudo -u ${USER} rm -rf ${HOMEDIR}/es-linux-apps ${HOMEDIR}/es-linux-app ${HOMEDIR}/.nvm ${HOMEDIR}/.npm
