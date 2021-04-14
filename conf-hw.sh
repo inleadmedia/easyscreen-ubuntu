@@ -41,7 +41,7 @@ sudo -u ${USER} wget -q --output-document=${HOMEDIR}/.ssh/authtoken http://stora
 
 AUTH_TOKEN=$(cat ${HOMEDIR}/.ssh/authtoken)
 DESTINATION="${HOMEDIR}/es-linux-app";
-LMS_DOMAIN="https://lms.inlead.ws";
+LMS_DOMAIN="https://v3.lms.inlead.dk";
 BRANCH=master;
 TWID=$(cat ${HOMEDIR}/.config/teamviewer/client.conf |grep -oP '(?<=ClientIDOfTSUser = )[0-9]+');
 
