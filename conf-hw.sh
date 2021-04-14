@@ -51,9 +51,6 @@ sudo -u ${USER} git clone -q -b $BRANCH "https://$AUTH_TOKEN@github.com/inleadme
 sudo -u ${USER} bash ${HOMEDIR}/es-linux-apps/installation/install-nvm.sh
 sudo -u ${USER} bash -c "bash ${HOMEDIR}/es-linux-apps/installation/install-app.sh --auth-token=$AUTH_TOKEN --destination=$DESTINATION --lms-domain=$LMS_DOMAIN --app-branch=$BRANCH --tmid=$TWID --feig-scanner-app-branch=$BRANCH --printer-app-branch=$BRANCH --barcode-app-branch=$BRANCH $1"
 
-# Uncomment app in kiosk startup file.
-sed -i 's/# sudo node/ sudo node/' ${HOMEDIR}/kiosk.sh
-
 # Add file in order to check for previous installation.
 touch $HWSUCCESSFILE
 

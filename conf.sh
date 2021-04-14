@@ -87,6 +87,11 @@ EOF
 
     mail -s 'New easyScreen device connected' support@inlead.dk -a "From: kiosk@inlead.dk" < ${HOMEDIR}/mail-details.txt
 
+    # Uncomment app in kiosk startup file.
+    if [[ -e $HWSUCCESSFILE ]]; then
+        sed -i 's/# sudo node/ sudo node/' ${HOMEDIR}/kiosk.sh
+    fi
+
     touch $SUCCESSFILE
 
     sleep 2
