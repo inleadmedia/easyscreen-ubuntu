@@ -36,11 +36,11 @@ fnCheckConnection() {
 
 	if [ ! -s /tmp/index.google ];then
 		notify-send 'easyScreen' 'Cannot connect to the internet. Re-attempting...' -u low
-		sleep 4s
+		sleep 3s
 		fnCheckConnection `expr $1 + 1`
 	else
 		notify-send 'easyScreen' 'Connected to the internet. Opening the screen.' -u low
-		sleep 4s
+		sleep 2s
 
 		notify-send 'easyScreen' 'Please wait - we are almost done.' -u low
 
@@ -52,11 +52,11 @@ fnCheckConnection() {
 
 		# Restart TW
 		sudo teamviewer daemon restart
-		sleep 2s
+		sleep 1s
 
 		# Run Chrome and open tab
 		pkill -f -- "chrome"
-		sleep 2s
+		sleep 1s
 		/usr/bin/google-chrome --disable-pinch --overscroll-history-navigation=0 --no-first-run \
 					--disable-translate --no-default-browser-check --password-store=basic \
 					--enable-native-gpu-memory-buffers --enable-features="CheckerImaging" \
