@@ -87,6 +87,7 @@ sudo tee -a /opt/teamviewer/config/global.conf >/dev/null <<'EOF'
 [int32] EulaAccepted = 1
 [int32] EulaAcceptedRevision = 6
 EOF
+sudo rm -f /etc/apt/sources.list.d/teamviewer.list
 
 echo "${GREEN}${TIMESTAMP} ${UNDERLINE}# Disable screen tearing${RESET}"
 sudo tee -a /usr/share/X11/xorg.conf.d/20-intel.conf >/dev/null <<'EOF'
